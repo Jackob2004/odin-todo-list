@@ -1,0 +1,11 @@
+# WebStorm project files
+.idea/
+*.iml
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# node
+node_modules
+dist
