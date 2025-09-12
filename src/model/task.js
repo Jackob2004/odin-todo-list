@@ -1,8 +1,13 @@
-import {Priority} from "../enums/priority.js"
-import {Status} from "../enums/status.js"
+import {Priority} from "../enums/priority.js";
+import {Status} from "../enums/status.js";
 
 /**
- * @typedef {Object} Task
+ * @module task
+ */
+
+/**
+ * @typedef module:task.Task
+ * @type {Object}
  * @property {string} title
  * @property {string} description
  * @property {Date} dueDate
@@ -19,7 +24,7 @@ import {Status} from "../enums/status.js"
  * @param {Priority} priority
  * @param {Status} status
  * @param {boolean} trackable
- * @returns {Task}
+ * @returns {module:task.Task}
  */
 function createTask(title, description, dueDate, priority, status, trackable) {
     const id = crypto.randomUUID();
