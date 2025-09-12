@@ -1,6 +1,3 @@
-import {Priority} from "../enums/priority.js";
-import {Status} from "../enums/status.js";
-
 /**
  * @module task
  */
