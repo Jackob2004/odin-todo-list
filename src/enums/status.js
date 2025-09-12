@@ -1,12 +1,9 @@
-/**
- *
- * @readonly
- * @enum {string}
- */
-const Status = Object.freeze({
-    NOT_STARTED: 'not_started',
-    IN_PROGRESS: 'in_progress',
-    DONE: 'done',
-});
+import {Enum} from "./enum.js";
+
+class Status extends Enum {
+    static NOT_STARTED = new Status("Not Started");
+    static IN_PROGRESS= new Status("In Progress");
+    static DONE= new Status("Done");
+}
 
 export {Status};
