@@ -1,5 +1,9 @@
 import {Enum} from "./enum.js";
 
+/**
+ * @module priority
+ */
+
 class Priority extends Enum {
     static LOW = new Priority("Low");
     static MEDIUM = new Priority("Medium");
