@@ -1,5 +1,16 @@
 /**
- * @module projectService responsible for managing projects and their corresponding tasks
+ * @module projectService responsible for managing projects and their corresponding contents
+ */
+
+
+/**
+ * @typedef module:projectService.TaskDetails
+ * @type {Object}
+ * @property {string} title
+ * @property {string} description
+ * @property {Date} dueDate
+ * @property {Priority} priority
+ * @property {boolean} trackable
  */
 
 /**
@@ -93,6 +104,66 @@ function deleteNote(noteId) {
     }
 
     return projects.get(selectedProjectId).notes.delete(noteId);
+}
+
+/**
+ * Edits task status in currently selected project
+ * @param taskId
+ * @param {Status} updatedStatus
+ * @returns {boolean} true if operation was successful
+ */
+function editTaskStatus(taskId, updatedStatus) {
+    if (!projects.has(selectedProjectId)) return false;
+
+    const task = projects.get(selectedProjectId).tasks.get(taskId);
+
+    if (!task) return false;
+
+    task.status = updatedStatus;
+
+    return true;
+}
+
+/**
+ * Edits task details in currently selected project
+ * @param {string} taskId
+ * @param {module:projectService.TaskDetails} details
+ * @returns {boolean} true if operation was successful
+ */
+function editTaskDetails(taskId, details) {
+    if (!projects.has(selectedProjectId)) return false;
+
+    const task = projects.get(selectedProjectId).tasks.get(taskId);
+
+    if (!task) return false;
+
+    task.title = details.title;
+    task.description = details.description;
+    task.dueDate = details.dueDate;
+    task.priority = details.priority;
+    task.trackable = details.trackable;
+
+    return true;
+}
+
+/**
+ * Edits note in currently selected project
+ * @param noteId
+ * @param title
+ * @param content
+ * @returns {boolean} true if operation was successful
+ */
+function editNote(noteId, title, content) {
+    if (!projects.has(selectedProjectId)) return false;
+
+    const note = projects.get(selectedProjectId).notes.get(noteId);
+
+    if (!note) return false;
+
+    note.title = title;
+    note.content = content;
+
+    return true;
 }
 
 /**
