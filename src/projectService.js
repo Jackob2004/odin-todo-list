@@ -25,15 +25,15 @@ function addProject(project) {
 /**
  *
  * @param {module:task.Task} task
- * @param {string} projectID provided argument or currently selected project as default
+ * @param {string} projectId provided argument or currently selected project as default
  * @returns {boolean} true if operation was successful
  */
-function addTask(task, projectID = selectedProjectId) {
-    if (!projects.has(projectID)) {
+function addTask(task, projectId = selectedProjectId) {
+    if (!projects.has(projectId)) {
         return false;
     }
 
-    projects.get(projectID).tasks.set(task.id, task);
+    projects.get(projectId).tasks.set(task.id, task);
 
     return true;
 }
@@ -41,30 +41,71 @@ function addTask(task, projectID = selectedProjectId) {
 /**
  *
  * @param {module:note.Note} note
- * @param {string} projectID provided argument or currently selected project as default
+ * @param {string} projectId provided argument or currently selected project as default
  * @returns {boolean} true if operation was successful
  */
-function addNote(note, projectID = selectedProjectId) {
-    if (!projects.has(projectID)) {
+function addNote(note, projectId = selectedProjectId) {
+    if (!projects.has(projectId)) {
         return false;
     }
 
-    projects.get(projectID).notes.set(note.id, note);
+    projects.get(projectId).notes.set(note.id, note);
 
     return true;
 }
 
 /**
  *
- * @param {string} projectID
+ * @param {string} projectId
  * @returns {boolean} true if operation was successful
  */
-function selectProject(projectID) {
-    if (!projects.has(projectID)) {
+function deleteProject(projectId) {
+    const existed = projects.delete(projectId);
+
+    if (existed && projectId === selectedProjectId) {
+        selectedProjectId = null;
+    }
+
+    return existed;
+}
+
+/**
+ * Deletes task from currently selected project
+ * @param {string} taskId
+ * @returns {boolean} true if operation was successful
+ */
+function deleteTask(taskId) {
+    if (!projects.has(selectedProjectId)) {
         return false;
     }
 
-    selectedProjectId = projectID;
+    return projects.get(selectedProjectId).tasks.delete(taskId);
+}
+
+/**
+ * Deletes note from currently selected project
+ * @param {string} noteId
+ * @returns {boolean} true if operation was successful
+ */
+function deleteNote(noteId) {
+    if (!projects.has(selectedProjectId)) {
+        return false;
+    }
+
+    return projects.get(selectedProjectId).notes.delete(noteId);
+}
+
+/**
+ *
+ * @param {string} projectId
+ * @returns {boolean} true if operation was successful
+ */
+function selectProject(projectId) {
+    if (!projects.has(projectId)) {
+        return false;
+    }
+
+    selectedProjectId = projectId;
 
     return true;
 }
