@@ -1,3 +1,5 @@
+import {SortBy} from "./enums/sortBy.js";
+
 /**
  * @module projectService responsible for managing projects and their corresponding contents
  */
@@ -10,6 +12,16 @@
  * @property {Date} dueDate
  * @property {Priority} priority
  * @property {boolean} trackable
+ */
+
+/**
+ * @typedef module:projectService.TaskSummary
+ * @type {Object}
+ * @property {string} title
+ * @property {Date} dueDate
+ * @property {Status} status
+ * @property {Priority} priority
+ * @property {string} id needed for binding summary with its UI representation
  */
 
 /**
@@ -167,7 +179,7 @@ function getAllProjects() {
 }
 
 /**
- * @returns {Array<{title:string, dueDate:Date, status:Status, priority:Priority, id:string}>|null}
+ * @returns {Array<module:projectService.TaskSummary>|null}
  * tasks in currently selected project or null if no project is selected
  */
 function getAllTasks() {
@@ -182,6 +194,21 @@ function getAllTasks() {
             id: k
         })
     );
+}
+
+/**
+ *
+ * @param {SortBy} sortBy
+ * @param {boolean} ascending determines order
+ * @returns {Array<module:projectService.TaskSummary>|null} tasks in a sorted manner or null if no project is selected
+ */
+function getAllTasksSorted(sortBy, ascending) {
+    const unsortedTasks = getAllTasks();
+    if (!unsortedTasks) return null;
+
+    const sortedTasks = unsortedTasks.sort(sortBy.comparator);
+
+    return ascending ? sortedTasks : sortedTasks.reverse();
 }
 
 /**
