@@ -167,6 +167,42 @@ function editNote(noteId, title, content) {
 }
 
 /**
+ * @returns {Array<{title:string, id:string}>}
+ */
+function getAllProjects() {
+    return Array.from(projects,
+        (v, k) => ({ title: v.title, id: k })
+    );
+}
+
+/**
+ * @returns {Array<{title:string, dueDate:Date, status:Status, priority:Priority, id:string}>|null}
+ * tasks in currently selected project or null if no project is selected
+ */
+function getAllTasks() {
+    if (!projects.has(selectedProjectId)) return null;
+
+    return Array.from(projects.get(selectedProjectId).tasks,
+        (v, k) => ({
+            title: v.title,
+            dueDate: v.dueDate,
+            status: v.status,
+            priority: v.priority,
+            id: k
+        })
+    );
+}
+
+/**
+ * @returns {Array<module:note.Note>|null} notes in currently selected project or null if no project is selected
+ */
+function getAllNotes() {
+    if (!projects.has(selectedProjectId)) return null;
+
+    return Array.from(projects.get(selectedProjectId).notes.values());
+}
+
+/**
  *
  * @param {string} projectId
  * @returns {boolean} true if operation was successful
