@@ -212,6 +212,19 @@ function getAllTasksSorted(sortBy, ascending) {
 }
 
 /**
+ *
+ * @returns {Array<module:projectService.TaskSummary>|null} overdue tasks or null if no project is selected
+ */
+function getOverdueTasks() {
+    const allTasks = getAllTasks();
+    if (!allTasks) return null;
+
+    const currentTime= new Date().getTime();
+
+    return allTasks.filter((task) => task.dueDate.getTime() < currentTime);
+}
+
+/**
  * @returns {Array<module:note.Note>|null} notes in currently selected project or null if no project is selected
  */
 function getAllNotes() {
