@@ -19,7 +19,7 @@
 const projects = new Map();
 
 /**
- *
+ * certain operations are based on which project is currently selected
  * @type {string|null}
  */
 let selectedProjectId = null;
@@ -191,6 +191,28 @@ function getAllNotes() {
     if (!projects.has(selectedProjectId)) return null;
 
     return Array.from(projects.get(selectedProjectId).notes.values());
+}
+
+/**
+ *
+ * @param taskId
+ * @returns {module:projectService.TaskDetails|null}
+ * task details if task in currently selected project exists null otherwise
+ */
+function getTaskDetails(taskId) {
+    if (!projects.has(selectedProjectId)) return null;
+
+    const task = projects.get(selectedProjectId).tasks.get(taskId);
+
+    if (!task) return null;
+
+    return {
+        title: task.title,
+        description: task.description,
+        dueDate: task.dueDate,
+        priority: task.priority,
+        trackable: task.trackable
+    };
 }
 
 /**
