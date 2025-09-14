@@ -2,7 +2,6 @@
  * @module projectService responsible for managing projects and their corresponding contents
  */
 
-
 /**
  * @typedef module:projectService.TaskDetails
  * @type {Object}
@@ -40,9 +39,7 @@ function addProject(project) {
  * @returns {boolean} true if operation was successful
  */
 function addTask(task, projectId = selectedProjectId) {
-    if (!projects.has(projectId)) {
-        return false;
-    }
+    if (!projects.has(projectId)) return false;
 
     projects.get(projectId).tasks.set(task.id, task);
 
@@ -56,9 +53,7 @@ function addTask(task, projectId = selectedProjectId) {
  * @returns {boolean} true if operation was successful
  */
 function addNote(note, projectId = selectedProjectId) {
-    if (!projects.has(projectId)) {
-        return false;
-    }
+    if (!projects.has(projectId)) return false;
 
     projects.get(projectId).notes.set(note.id, note);
 
@@ -86,9 +81,7 @@ function deleteProject(projectId) {
  * @returns {boolean} true if operation was successful
  */
 function deleteTask(taskId) {
-    if (!projects.has(selectedProjectId)) {
-        return false;
-    }
+    if (!projects.has(selectedProjectId)) return false;
 
     return projects.get(selectedProjectId).tasks.delete(taskId);
 }
@@ -99,9 +92,7 @@ function deleteTask(taskId) {
  * @returns {boolean} true if operation was successful
  */
 function deleteNote(noteId) {
-    if (!projects.has(selectedProjectId)) {
-        return false;
-    }
+    if (!projects.has(selectedProjectId)) return false;
 
     return projects.get(selectedProjectId).notes.delete(noteId);
 }
@@ -208,9 +199,7 @@ function getAllNotes() {
  * @returns {boolean} true if operation was successful
  */
 function selectProject(projectId) {
-    if (!projects.has(projectId)) {
-        return false;
-    }
+    if (!projects.has(projectId)) return false;
 
     selectedProjectId = projectId;
 
