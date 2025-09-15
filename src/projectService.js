@@ -1,4 +1,4 @@
-import {SortBy} from "./enums/sortBy.js";
+import {createProject} from "./model/project.js";
 
 /**
  * @module projectService responsible for managing projects and their corresponding contents
@@ -266,4 +266,21 @@ function selectProject(projectId) {
     selectedProjectId = projectId;
 
     return true;
+}
+
+/**
+ * @param {Array<module:project.Project>} projects
+ */
+function loadProjects(projects) {
+    for (const project of projects) {
+        addProject(project);
+    }
+}
+
+function initializeDefaultProject() {
+    if (projects.size !== 0) return;
+
+    const defaultProject = createProject("Default");
+    projects.set(defaultProject.id, defaultProject);
+    selectedProjectId = defaultProject.id;
 }
