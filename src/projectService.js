@@ -5,6 +5,15 @@ import {createProject} from "./model/project.js";
  */
 
 /**
+ * @typedef module:projectService.ProjectSummary
+ * @type {Object}
+ * @property {string} title
+ * @property {number} tasks
+ * @property {number} notes
+ * @property {string} id
+ */
+
+/**
  * @typedef module:projectService.TaskDetails
  * @type {Object}
  * @property {string} title
@@ -174,11 +183,16 @@ function editNote(noteId, title, content) {
 }
 
 /**
- * @returns {Array<{title:string, id:string}>}
+ * @returns {Array<module:projectService.ProjectSummary>}
  */
 function getAllProjects() {
     return Array.from(projects,
-        (v, k) => ({ title: v.title, id: k })
+        (v, k) => ({
+            title: v.title,
+            tasks: v.tasks.size,
+            notes: v.notes.size,
+            id: k
+        })
     );
 }
 
