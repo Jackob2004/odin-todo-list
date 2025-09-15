@@ -51,7 +51,7 @@
                 </div>
             </div>
 
-            <fieldset>
+            <fieldset id="items-options">
                 <legend>Select project items to display:</legend>
                 <div>
                     <input type="radio" id="display-tasks" name="display-mode" value="tasks" checked />
@@ -63,15 +63,15 @@
 
             <div id="tasks-sorter">
 
-                <fieldset>
-                    <legend>Sort by:</legend>
+                <fieldset id="sorting-options">
+                    <legend>Sort tasks by:</legend>
                     <div>
                         <input type="radio" id="sort-by-none" name="sorting-mode" value="none" checked />
                         <label for="sort-by-none">None</label>
                         <input type="radio" id="sort-by-priority" name="sorting-mode" value="priority" />
                         <label for="sort-by-priority">Priority</label>
                         <input type="radio" id="sort-by-date" name="sorting-mode" value="date" />
-                        <label for="sort-by-date">Date</label>
+                        <label for="sort-by-date">Due Date</label>
                         <input type="radio" id="sort-by-status" name="sorting-mode" value="status" />
                         <label for="sort-by-status">Status</label>
                     </div>
@@ -79,6 +79,14 @@
                     <div>
                         <input type="checkbox" id="ordering" checked />
                         <label for="ordering">Ascending order</label>
+                    </div>
+                </fieldset>
+
+                <fieldset id="filtering-options">
+                    <legend>Filter tasks by:</legend>
+                    <div>
+                        <input type="checkbox" id="filter-overdue" />
+                        <label for="filter-overdue">Only overdue</label>
                     </div>
                 </fieldset>
 
