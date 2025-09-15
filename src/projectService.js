@@ -39,9 +39,13 @@ let selectedProjectId = null;
 /**
  *
  * @param {module:project.Project} project
+ * @returns {boolean} true if operation was successful
  */
 function addProject(project) {
+    if (!project) return false;
     projects.set(project.id, project);
+
+    return true;
 }
 
 /**
@@ -51,7 +55,7 @@ function addProject(project) {
  * @returns {boolean} true if operation was successful
  */
 function addTask(task, projectId = selectedProjectId) {
-    if (!projects.has(projectId)) return false;
+    if (!projects.has(projectId) || !task) return false;
 
     projects.get(projectId).tasks.set(task.id, task);
 
@@ -65,7 +69,7 @@ function addTask(task, projectId = selectedProjectId) {
  * @returns {boolean} true if operation was successful
  */
 function addNote(note, projectId = selectedProjectId) {
-    if (!projects.has(projectId)) return false;
+    if (!projects.has(projectId) || !note) return false;
 
     projects.get(projectId).notes.set(note.id, note);
 
@@ -116,7 +120,7 @@ function deleteNote(noteId) {
  * @returns {boolean} true if operation was successful
  */
 function editTaskStatus(taskId, updatedStatus) {
-    if (!projects.has(selectedProjectId)) return false;
+    if (!projects.has(selectedProjectId) || !updatedStatus) return false;
 
     const task = projects.get(selectedProjectId).tasks.get(taskId);
 
@@ -134,7 +138,7 @@ function editTaskStatus(taskId, updatedStatus) {
  * @returns {boolean} true if operation was successful
  */
 function editTaskDetails(taskId, details) {
-    if (!projects.has(selectedProjectId)) return false;
+    if (!projects.has(selectedProjectId) || !details) return false;
 
     const task = projects.get(selectedProjectId).tasks.get(taskId);
 
@@ -157,7 +161,7 @@ function editTaskDetails(taskId, details) {
  * @returns {boolean} true if operation was successful
  */
 function editNote(noteId, title, content) {
-    if (!projects.has(selectedProjectId)) return false;
+    if (!projects.has(selectedProjectId) || !title || !content) return false;
 
     const note = projects.get(selectedProjectId).notes.get(noteId);
 
@@ -203,6 +207,8 @@ function getAllTasks() {
  * @returns {Array<module:projectService.TaskSummary>|null} tasks in a sorted manner or null if no project is selected
  */
 function getAllTasksSorted(sortBy, ascending) {
+    if (!sortBy || !ascending) return null;
+
     const unsortedTasks = getAllTasks();
     if (!unsortedTasks) return null;
 
@@ -272,6 +278,8 @@ function selectProject(projectId) {
  * @param {Array<module:project.Project>} projects
  */
 function loadProjects(projects) {
+    if (!projects) return;
+
     for (const project of projects) {
         addProject(project);
     }
