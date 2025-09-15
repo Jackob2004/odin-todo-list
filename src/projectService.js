@@ -218,11 +218,10 @@ function getAllTasksSorted(sortBy, ascending) {
 }
 
 /**
- *
- * @returns {Array<module:projectService.TaskSummary>|null} overdue tasks or null if no project is selected
+ * @param {Array<module:projectService.TaskSummary>} allTasks the array to filter
+ * @returns {Array<module:projectService.TaskSummary>|null} overdue tasks or null if provided argument is not valid
  */
-function getOverdueTasks() {
-    const allTasks = getAllTasks();
+function getOverdueTasks(allTasks) {
     if (!allTasks) return null;
 
     const currentTime= new Date().getTime();
