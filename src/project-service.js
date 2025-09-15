@@ -187,11 +187,11 @@ function editNote(noteId, title, content) {
  */
 function getAllProjects() {
     return Array.from(projects,
-        (v, k) => ({
-            title: v.title,
-            tasks: v.tasks.size,
-            notes: v.notes.size,
-            id: k
+        ([name, value]) => ({
+            title: value.title,
+            tasks: value.tasks.size,
+            notes: value.notes.size,
+            id: name
         })
     );
 }
@@ -204,12 +204,12 @@ function getAllTasks() {
     if (!projects.has(selectedProjectId)) return null;
 
     return Array.from(projects.get(selectedProjectId).tasks,
-        (v, k) => ({
-            title: v.title,
-            dueDate: v.dueDate,
-            status: v.status,
-            priority: v.priority,
-            id: k
+        ([name, value]) => ({
+            title: value.title,
+            dueDate: value.dueDate,
+            status: value.status,
+            priority: value.priority,
+            id: name
         })
     );
 }
@@ -304,4 +304,25 @@ function initializeDefaultProject() {
     const defaultProject = createProject("Default");
     projects.set(defaultProject.id, defaultProject);
     selectedProjectId = defaultProject.id;
+
+    console.log(projects.get(selectedProjectId));
+}
+
+export {
+    addProject,
+    addTask,
+    addNote,
+    deleteProject,
+    deleteTask,
+    deleteNote,
+    editTaskStatus,
+    editTaskDetails,
+    editNote,
+    getAllProjects,
+    getAllTasksSorted,
+    getOverdueTasks,
+    getTaskDetails,
+    selectProject,
+    loadProjects,
+    initializeDefaultProject,
 }
