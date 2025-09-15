@@ -14,3 +14,17 @@ main {
     grid-template-rows: auto 1fr auto;
 
 }
+
+#projects-container {
+    --gap: 1rem;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-auto-rows: 50%;
+    gap: var(--gap);
+
+    padding: var(--gap);
+}
+
+.project-card {
+}
