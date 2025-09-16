@@ -1,5 +1,7 @@
 import {createProject} from "./model/project.js";
-import {addProject} from "./project-service";
+import {addProject} from "./project-service.js";
+import {pubSub} from "./pub-sub.js";
+import {EventType} from "./enums/event-type.js";
 
 /**
  * @module contentCreationController
@@ -40,5 +42,5 @@ function handleProjectCreation() {
 
     if (!addProject(project)) return;
 
-    console.log("notify");
+    pubSub.publish(EventType.PROJECT_CREATED, project);
 }

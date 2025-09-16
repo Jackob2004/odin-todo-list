@@ -8,6 +8,20 @@
 </head>
 <body>
 
+    <dialog id="add-project-window">
+        <form method="dialog">
+            <p>Required fields are followed by <strong><span aria-label="required">*</span></strong>.</p>
+
+            <label for="title">Title<strong><span aria-label="required">*</span></strong></label>
+            <input type="text" name="title" id="title" autofocus maxlength="20" required>
+
+            <div>
+                <button type="button" formnovalidate>Cancel</button>
+                <button type="submit">Confirm</button>
+            </div>
+        </form>
+    </dialog>
+
     <div id="sidebar">
         <h1>Todo List</h1>
 

@@ -1,10 +1,15 @@
 import {Status} from "./enums/status.js";
 import {selectProject, getAllTasks, getAllProjects, getProjectName} from "./project-service.js";
+import {pubSub} from "./pub-sub.js";
+import {EventType} from "./enums/event-type";
+import {DisplayState} from "./enums/display-state";
 
 /**
- * @module mainUIController responsible for UI interaction in the main section of the page.
+ * @module contentDisplayController responsible for UI interaction in the main section of the page.
  * Enables viewing projects and their contents.
  */
+
+let displayState = DisplayState.VIEW_PROJECTS;
 
 const projectsContainer = document.querySelector("#projects-container");
 const projectsInfoDisplay = document.querySelector("#projects-info h2");
@@ -19,8 +24,23 @@ projectsContainer.addEventListener("click", (event) => {
 // come back to all projects
 backButton.addEventListener("click", () => {
     displayProjects(getAllProjects());
+    displayState = DisplayState.VIEW_PROJECTS;
     projectsInfoDisplay.textContent = "All Projects";
     backButton.disabled = true;
+});
+
+pubSub.subscribe(EventType.PROJECT_CREATED, (data) => {
+    if (displayState !== DisplayState.VIEW_PROJECTS) return;
+
+    const summary = {
+        title: data.title,
+        tasks: data.tasks.size,
+        notes: data.notes.size,
+        id: data.id,
+    };
+
+    const projectCard = generateProjectCard(summary);
+    projectsContainer.appendChild(projectCard);
 });
 
 /**
@@ -33,6 +53,7 @@ function openProject(projectId) {
     if (!tasks) return;
 
     displayTasks(tasks);
+    displayState = DisplayState.VIEW_Tasks;
     projectsInfoDisplay.textContent = getProjectName();
     backButton.disabled = false;
 }
