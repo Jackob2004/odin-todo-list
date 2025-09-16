@@ -75,8 +75,8 @@ function generateTaskCard(taskSummary) {
 
     for (const status of Object.values(Status)) {
         const option = document.createElement("option");
-        option.value = status;
-        option.textContent = status;
+        option.value = status.name;
+        option.textContent = status.name;
 
         if (status.name === taskSummary.status.name) {
             option.selected = true;
