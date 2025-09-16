@@ -183,6 +183,17 @@ function editNote(noteId, title, content) {
 }
 
 /**
+ *
+ * @param {string} projectId provided argument or currently selected project by default
+ * @returns {string|null} null if project doesn't exist
+ */
+function getProjectName(projectId = selectedProjectId) {
+    if (!projects.has(projectId)) return null;
+
+    return projects.get(projectId).title;
+}
+
+/**
  * @returns {Array<module:projectService.ProjectSummary>}
  */
 function getAllProjects() {
@@ -213,7 +224,7 @@ function getAllTasks() {
         })
     );
 }
-
+// TODO: move sorting and filtering to a separate module to make projectService provide raw data only
 /**
  *
  * @param {SortBy} sortBy
@@ -304,8 +315,6 @@ function initializeDefaultProject() {
     const defaultProject = createProject("Default");
     projects.set(defaultProject.id, defaultProject);
     selectedProjectId = defaultProject.id;
-
-    console.log(projects.get(selectedProjectId));
 }
 
 export {
@@ -318,7 +327,9 @@ export {
     editTaskStatus,
     editTaskDetails,
     editNote,
+    getProjectName,
     getAllProjects,
+    getAllTasks,
     getAllTasksSorted,
     getOverdueTasks,
     getTaskDetails,
