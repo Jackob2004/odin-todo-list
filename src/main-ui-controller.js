@@ -1,3 +1,5 @@
+import {Status} from "./enums/status";
+
 /**
  * @module mainUIController responsible for UI interaction in the main section of the page.
  * Enables viewing projects and their contents
@@ -22,7 +24,7 @@ function generateProjectCard(projectData) {
     totalTasks.textContent = "Tasks: " + projectData.tasks;
     totalNotes.textContent = "Notes: " + projectData.notes;
 
-    card.dataset.id = projectData.id;
+    card.dataset.projectId = projectData.id;
     card.setAttribute("class", "project-card");
 
     itemsInfoWrapper.append(totalTasks, totalNotes);
@@ -43,3 +45,38 @@ function displayProjectsCards(projects) {
 
     projectsContainer.appendChild(fragment);
 }
+
+/**
+ * @param {module:projectService.TaskSummary} taskSummary
+ */
+function generateTaskCard(taskSummary) {
+    const card = document.createElement("div");
+    const heading = document.createElement("h4");
+    const selectStatus = document.createElement("select");
+    const dateInfo = document.createElement("p");
+    const deleteButton = document.createElement("button");
+
+    heading.textContent = taskSummary.title;
+
+    for (const status of Object.values(Status)) {
+        const option = document.createElement("option");
+        option.value = status;
+        option.textContent = status;
+
+        if (status.name === taskSummary.status.name) {
+            option.selected = true;
+        }
+        selectStatus.appendChild(option);
+    }
+
+    dateInfo.textContent = taskSummary.dueDate.toLocaleDateString();
+    deleteButton.textContent = "X";
+
+    card.dataset.taskId = taskSummary.id;
+    card.setAttribute("class", "task-card");
+    card.append(heading, selectStatus, dateInfo, deleteButton);
+
+    return card;
+}
+
+export {displayProjectsCards};
