@@ -13,18 +13,17 @@ class Enum {
     }
 
     /**
-     *
      * @param {string} value
      * @returns {Enum}
      */
     static fromString(value) {
-        const priority = Object.values(this)
+        const enumValue = Object.values(this)
             .find(p => p.name === value);
 
-        if (!priority) {
-            throw new Error(`Invalid priority: ${value}`);
+        if (!enumValue) {
+            throw new Error(`Invalid enum value: ${value}`);
         }
-        return priority;
+        return enumValue;
     }
 
     toJSON() {
