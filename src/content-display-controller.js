@@ -1,8 +1,8 @@
 import {Status} from "./enums/status.js";
 import {selectProject, getAllTasks, getAllProjects, getProjectName} from "./project-service.js";
 import {pubSub} from "./pub-sub.js";
-import {EventType} from "./enums/event-type";
-import {DisplayState} from "./enums/display-state";
+import {EventType} from "./enums/event-type.js";
+import {DisplayState} from "./enums/display-state.js";
 
 /**
  * @module contentDisplayController responsible for UI interaction in the main section of the page.

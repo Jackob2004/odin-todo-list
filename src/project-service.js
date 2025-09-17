@@ -194,6 +194,14 @@ function getProjectName(projectId = selectedProjectId) {
 }
 
 /**
+ *
+ * @returns {string|null} id or nll if no project is currently selected
+ */
+function getSelectedProjectId() {
+    return selectedProjectId;
+}
+
+/**
  * @returns {Array<module:projectService.ProjectSummary>}
  */
 function getAllProjects() {
@@ -314,7 +322,6 @@ function initializeDefaultProject() {
 
     const defaultProject = createProject("Default");
     projects.set(defaultProject.id, defaultProject);
-    selectedProjectId = defaultProject.id;
 }
 
 export {
@@ -328,6 +335,7 @@ export {
     editTaskDetails,
     editNote,
     getProjectName,
+    getSelectedProjectId,
     getAllProjects,
     getAllTasks,
     getAllTasksSorted,
