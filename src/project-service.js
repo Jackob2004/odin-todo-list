@@ -307,6 +307,13 @@ function selectProject(projectId) {
 }
 
 /**
+ * Deselects currently selected project
+ */
+function leaveProject() {
+    selectedProjectId = null;
+}
+
+/**
  * @param {Array<module:project.Project>} projects
  */
 function loadProjects(projects) {
@@ -342,6 +349,7 @@ export {
     getOverdueTasks,
     getTaskDetails,
     selectProject,
+    leaveProject,
     loadProjects,
     initializeDefaultProject,
 }
