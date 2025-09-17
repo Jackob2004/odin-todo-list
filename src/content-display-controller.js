@@ -1,5 +1,5 @@
 import {Status} from "./enums/status.js";
-import {selectProject, getAllTasks, getAllProjects, getProjectName} from "./project-service.js";
+import {selectProject, getAllTasks, getAllProjects, getProjectName, getSelectedProjectId} from "./project-service.js";
 import {pubSub} from "./pub-sub.js";
 import {EventType} from "./enums/event-type.js";
 import {DisplayState} from "./enums/display-state.js";
@@ -41,6 +41,23 @@ pubSub.subscribe(EventType.PROJECT_CREATED, (data) => {
 
     const projectCard = generateProjectCard(summary);
     projectsContainer.appendChild(projectCard);
+});
+
+pubSub.subscribe(EventType.TASK_CREATED, (data) => {
+    if (displayState === DisplayState.VIEW_PROJECTS) {
+        displayProjects(getAllProjects());
+    } else if (displayState === DisplayState.VIEW_Tasks && data.projectId === getSelectedProjectId()) {
+        const summary =  {
+            title: data.task.title,
+            dueDate: data.task.dueDate,
+            status: data.task.status,
+            priority: data.task.priority,
+            id: data.id,
+        };
+
+        const taskCard = generateTaskCard(summary);
+        projectsContainer.appendChild(taskCard);
+    }
 });
 
 /**

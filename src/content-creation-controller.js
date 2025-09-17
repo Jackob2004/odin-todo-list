@@ -124,5 +124,5 @@ function handleTaskCreation() {
     const task = createTask(taskTitle, description, dueDate, priority, Status.NOT_STARTED, trackable);
     if (!addTask(task, projectId)) return;
 
-    pubSub.publish(EventType.TASK_CREATED, task);
+    pubSub.publish(EventType.TASK_CREATED, {task: task, projectId: projectId});
 }
