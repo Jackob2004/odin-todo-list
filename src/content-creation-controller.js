@@ -1,10 +1,11 @@
 import {createProject} from "./model/project.js";
-import {addProject, addTask, getAllProjects, getProjectName, getSelectedProjectId} from "./project-service.js";
+import {addNote, addProject, addTask, getAllProjects, getProjectName, getSelectedProjectId} from "./project-service.js";
 import {pubSub} from "./pub-sub.js";
 import {EventType} from "./enums/event-type.js";
 import {Priority} from "./enums/priority.js";
 import {Status} from "./enums/status.js";
 import {createTask} from "./model/task.js";
+import {createNote} from "./model/note";
 
 /**
  * @module contentCreationController
@@ -19,7 +20,11 @@ const projectAddForm = document.querySelector("#add-project-window form");
 
 const taskAddWindow = document.querySelector("#add-task-window");
 const taskAddForm = document.querySelector("#add-task-window form");
-const taskAvailableProjects= document.querySelector("#task-project-select");
+const taskProjectSelect = document.querySelector("#task-project-select");
+
+const noteAddWindow = document.querySelector("#add-note-window");
+const noteAddForm = document.querySelector("#add-note-window form");
+const noteProjectSelect = document.querySelector("#note-project-select");
 
 buttonsSection.addEventListener("click", (e) => {
     switch (e.target.id) {
@@ -30,7 +35,7 @@ buttonsSection.addEventListener("click", (e) => {
             showTaskAddWindow();
             break;
         case "add-note":
-            console.log("add note");
+            showNoteAddWindow();
             break;
     }
 });
@@ -40,6 +45,9 @@ projectAddForm.addEventListener("submit", handleProjectCreation);
 
 document.querySelector("#add-task-window button[type='button']").onclick = () => taskAddWindow.close();
 taskAddForm.addEventListener("submit", handleTaskCreation);
+
+document.querySelector("#add-note-window button[type='button']").onclick = () => noteAddWindow.close();
+noteAddForm.addEventListener("submit", handleNoteCreation);
 
 function showProjectAddWindow() {
     projectAddForm.reset();
@@ -92,7 +100,7 @@ function showTaskAddWindow() {
     taskAddForm.date.value = currDate;
     taskAddForm.date.min = currDate;
 
-    taskAvailableProjects.replaceChildren(generateAvailableProjects());
+    taskProjectSelect.replaceChildren(generateAvailableProjects());
 
     taskAddWindow.showModal();
 }
@@ -112,4 +120,26 @@ function handleTaskCreation() {
     if (!addTask(task, projectId)) return;
 
     pubSub.publish(EventType.TASK_CREATED, {task: task, projectId: projectId});
+}
+
+function showNoteAddWindow() {
+    noteAddForm.reset();
+
+    noteProjectSelect.replaceChildren(generateAvailableProjects());
+
+    noteAddWindow.showModal();
+}
+
+function handleNoteCreation() {
+    const formData = new FormData(noteAddForm);
+
+    const projectId = formData.get("project");
+
+    const title = formData.get("title");
+    const description = formData.get("description");
+
+    const note = createNote(title, description);
+    if (!addNote(note, projectId)) return;
+
+    pubSub.publish(EventType.NOTE_CREATED, {note: note, projectId: projectId});
 }

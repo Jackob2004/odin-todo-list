@@ -58,6 +58,27 @@
         </form>
     </dialog>
 
+    <dialog id="add-note-window">
+        <h3>Add Note</h3>
+        <form method="dialog">
+            <p>Required fields are followed by <strong><span aria-label="required">*</span></strong>.</p>
+
+            <label for="note-project-select">Project<strong><span aria-label="required">*</span></strong></label>
+            <select name="project" id="note-project-select"></select>
+
+            <label for="note-title-field">Title<strong><span aria-label="required">*</span></strong></label>
+            <input type="text" name="title" id="note-title-field" autofocus maxlength="20" required>
+
+            <label for="note-description-field">Description<strong><span aria-label="required">*</span></strong></label>
+            <textarea name="description" id="note-description-field" rows="5" cols="33" maxlength="70" required></textarea>
+
+            <div>
+                <button type="button" formnovalidate>Cancel</button>
+                <button type="submit">Confirm</button>
+            </div>
+        </form>
+    </dialog>
+
     <div id="sidebar">
         <h1>Todo List</h1>
 
