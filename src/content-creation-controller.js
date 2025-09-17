@@ -19,7 +19,7 @@ const projectAddForm = document.querySelector("#add-project-window form");
 
 const taskAddWindow = document.querySelector("#add-task-window");
 const taskAddForm = document.querySelector("#add-task-window form");
-const availableProjectsList= document.querySelector("#available-projects");
+const taskAvailableProjects= document.querySelector("#task-project-select");
 
 buttonsSection.addEventListener("click", (e) => {
     switch (e.target.id) {
@@ -66,9 +66,8 @@ function generateAvailableProjects() {
     // make sure first option is at the top
     if (currProjectId) {
         const firstOption = document.createElement("option");
-        firstOption.value = getProjectName();
-        firstOption.label = "[Current Project]";
-        firstOption.dataset.projectId = currProjectId;
+        firstOption.value = currProjectId;
+        firstOption.textContent = "[Current Project] " + getProjectName();
 
         fragment.appendChild(firstOption);
     }
@@ -77,25 +76,13 @@ function generateAvailableProjects() {
         if (currProjectId === summary.id) continue;
 
         const option = document.createElement("option");
-        option.value = summary.title;
-        option.dataset.projectId = summary.id;
+        option.value = summary.id;
+        option.textContent = summary.title;
 
         fragment.appendChild(option);
     }
 
     return fragment;
-}
-
-/**
- *
- * @param {FormData} formData
- * @returns {string} selected project id
- */
-function retrieveProjectId(formData) {
-    const selectedName = formData.get("task-project-choice");
-    const selectedOption = document.querySelector(`#available-projects option[value="${selectedName}"]`);
-
-    return selectedOption.dataset.projectId;
 }
 
 function showTaskAddWindow() {
@@ -105,7 +92,7 @@ function showTaskAddWindow() {
     taskAddForm.date.value = currDate;
     taskAddForm.date.min = currDate;
 
-    availableProjectsList.replaceChildren(generateAvailableProjects());
+    taskAvailableProjects.replaceChildren(generateAvailableProjects());
 
     taskAddWindow.showModal();
 }
@@ -113,15 +100,15 @@ function showTaskAddWindow() {
 function handleTaskCreation() {
     const formData = new FormData(taskAddForm);
 
-    const projectId = retrieveProjectId(formData);
+    const projectId = formData.get("project");
 
-    const taskTitle = formData.get("title");
+    const title = formData.get("title");
     const description = formData.get("description");
     const dueDate = new Date("" + formData.get("date"));
     const priority = /** @type {Priority} */ Priority.fromString(formData.get("priority"));
     const trackable = formData.get("track") === "on";
 
-    const task = createTask(taskTitle, description, dueDate, priority, Status.NOT_STARTED, trackable);
+    const task = createTask(title, description, dueDate, priority, Status.NOT_STARTED, trackable);
     if (!addTask(task, projectId)) return;
 
     pubSub.publish(EventType.TASK_CREATED, {task: task, projectId: projectId});

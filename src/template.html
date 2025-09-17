@@ -28,9 +28,8 @@
         <form method="dialog">
             <p>Required fields are followed by <strong><span aria-label="required">*</span></strong>.</p>
 
-            <label for="task-project-list">Project<strong><span aria-label="required">*</span></strong></label>
-            <input list="available-projects" id="task-project-list" name="task-project-choice" required>
-            <datalist id="available-projects"></datalist>
+            <label for="task-project-select">Project<strong><span aria-label="required">*</span></strong></label>
+            <select name="project" id="task-project-select"></select>
 
             <label for="task-title-field">Title<strong><span aria-label="required">*</span></strong></label>
             <input type="text" name="title" id="task-title-field" autofocus maxlength="20" required>
