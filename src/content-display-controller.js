@@ -5,13 +5,13 @@ import {
     getAllProjects,
     getProjectName,
     getSelectedProjectId,
-    leaveProject, getAllNotes
+    leaveProject, getAllNotes,
 } from "./project-service.js";
 import {pubSub} from "./pub-sub.js";
 import {EventType} from "./enums/event-type.js";
 import {DisplayState} from "./enums/display-state.js";
 import {SortBy} from "./enums/sort-by";
-import {sortedTasks} from "./task-filter-service";
+import {filteredOverdueTasks, sortedTasks} from "./task-filter-service";
 
 /**
  * @module contentDisplayController responsible for UI interaction in the main section of the page.
@@ -25,6 +25,7 @@ const projectsInfoDisplay = document.querySelector("#projects-info h2");
 const backButton = document.querySelector("#btn-back");
 
 const tasksOrderInput = document.querySelector("#tasks-ordering");
+const tasksFilterInput = document.querySelector("#tasks-filtering");
 
 projectsContainer.addEventListener("click", (event) => {
    if (event.target.dataset.projectId) {
@@ -33,7 +34,8 @@ projectsContainer.addEventListener("click", (event) => {
 });
 
 document.querySelector("#items-options").addEventListener("click", swapProjectContent);
-document.querySelector("#sorting-options").addEventListener("click", swapSortedTasks);
+document.querySelector("#sorting-options").addEventListener("click", swapTasks);
+document.querySelector("#filtering-options").addEventListener("click", swapTasks);
 
 // come back to all projects
 backButton.addEventListener("click", () => {
@@ -81,7 +83,11 @@ pubSub.subscribe(EventType.NOTE_CREATED, (data) => {
    }
 });
 
-function swapSortedTasks(e) {
+/**
+ *
+ * @param {Event} e
+ */
+function swapTasks(e) {
     if (displayState !== DisplayState.VIEW_Tasks) return;
     if (e.target.tagName !== "INPUT" && e.target.tagName !== "LABEL") return;
 
@@ -248,6 +254,9 @@ function displayTasks(summaries) {
     } catch (error) {
         tasksToDisplay = summaries;
     }
+
+    const filter = tasksFilterInput.checked;
+    tasksToDisplay = filter ? filteredOverdueTasks(tasksToDisplay) : tasksToDisplay;
 
     displayCards(tasksToDisplay, generateTaskCard);
 }
