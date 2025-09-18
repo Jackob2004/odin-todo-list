@@ -5,7 +5,7 @@ import {Enum} from './enum.js';
  */
 
 class SortBy extends Enum {
-    static PRIORITY = new SortBy("priority",
+    static PRIORITY = new SortBy("Priority",
         /**
          * @param {module:projectService.TaskSummary} a
          * @param {module:projectService.TaskSummary} b
@@ -13,7 +13,7 @@ class SortBy extends Enum {
         (a, b) => a.priority.priorityLevel - b.priority.priorityLevel
     );
 
-    static DUE_DATE= new SortBy("date",
+    static DUE_DATE= new SortBy("Date",
         /**
          * @param {module:projectService.TaskSummary} a
          * @param {module:projectService.TaskSummary} b
@@ -21,7 +21,7 @@ class SortBy extends Enum {
         (a, b) => a.dueDate - b.dueDate
     );
 
-    static STATUS= new SortBy("status",
+    static STATUS= new SortBy("Status",
         /**
          * @param {module:projectService.TaskSummary} a
          * @param {module:projectService.TaskSummary} b

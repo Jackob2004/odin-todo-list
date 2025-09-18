@@ -14,6 +14,7 @@ class Enum {
 
     /**
      * @param {string} value
+     * @throws {Error} if enum value doesn't exist
      * @returns {Enum}
      */
     static fromString(value) {
