@@ -26,7 +26,10 @@ function sortedTasks(allTasks, sortBy, ascending) {
 function filteredOverdueTasks(allTasks) {
     if (!allTasks) return null;
 
-    const currentTime= new Date().getTime();
+    const currentDate= new Date();
+    currentDate.setHours(0,0,0);
+
+    const currentTime = currentDate.getTime();
 
     return allTasks.filter((task) => task.dueDate.getTime() < currentTime);
 }
