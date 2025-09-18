@@ -345,6 +345,7 @@ export {
     getSelectedProjectId,
     getAllProjects,
     getAllTasks,
+    getAllNotes,
     getAllTasksSorted,
     getOverdueTasks,
     getTaskDetails,

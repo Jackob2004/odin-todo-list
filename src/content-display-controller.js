@@ -1,5 +1,12 @@
 import {Status} from "./enums/status.js";
-import {selectProject, getAllTasks, getAllProjects, getProjectName, getSelectedProjectId} from "./project-service.js";
+import {
+    selectProject,
+    getAllTasks,
+    getAllProjects,
+    getProjectName,
+    getSelectedProjectId,
+    leaveProject, getAllNotes
+} from "./project-service.js";
 import {pubSub} from "./pub-sub.js";
 import {EventType} from "./enums/event-type.js";
 import {DisplayState} from "./enums/display-state.js";
@@ -8,6 +15,8 @@ import {DisplayState} from "./enums/display-state.js";
  * @module contentDisplayController responsible for UI interaction in the main section of the page.
  * Enables viewing projects and their contents.
  */
+
+// TODO: switch between viewing notes and tasks in selected project, update UI on note creation (subscribe)
 
 let displayState = DisplayState.VIEW_PROJECTS;
 
@@ -21,8 +30,11 @@ projectsContainer.addEventListener("click", (event) => {
    }
 });
 
+document.querySelector("#items-options").addEventListener("click", swapProjectContent);
+
 // come back to all projects
 backButton.addEventListener("click", () => {
+    leaveProject();
     displayProjects(getAllProjects());
     displayState = DisplayState.VIEW_PROJECTS;
     projectsInfoDisplay.textContent = "All Projects";
@@ -60,24 +72,64 @@ pubSub.subscribe(EventType.TASK_CREATED, (data) => {
     }
 });
 
+pubSub.subscribe(EventType.NOTE_CREATED, (data) => {
+   if (displayState === DisplayState.VIEW_PROJECTS) {
+       displayProjects(getAllProjects());
+   } else if (displayState === DisplayState.VIEW_Notes && data.projectId === getSelectedProjectId()) {
+       const note = {
+           title: data.note.title,
+           content: data.note.content,
+           id: data.note.id,
+       };
+
+       const noteCard = generateNoteCard(note);
+       projectsContainer.appendChild(noteCard);
+   }
+});
+
+/**
+ *
+ * @param {Event} e
+ */
+function swapProjectContent(e) {
+    if (displayState === DisplayState.VIEW_PROJECTS) return;
+    if (e.target.tagName !== "INPUT" &&  e.target.tagName !== "LABEL") return;
+
+    const selected = document.querySelector('#items-options input[name="display-mode"]:checked');
+
+    displayChosenContent(selected.value);
+}
+
+/**
+ *
+ * @param {string} selectedValue
+ */
+function displayChosenContent(selectedValue) {
+    displayState = DisplayState.fromString(selectedValue);
+
+    if (displayState === DisplayState.VIEW_Tasks) {
+        displayTasks(getAllTasks());
+    } else if (displayState === DisplayState.VIEW_Notes) {
+        displayNotes(getAllNotes());
+    }
+}
+
 /**
  *
  * @param {string} projectId
  */
 function openProject(projectId) {
     selectProject(projectId);
-    const tasks = getAllTasks();
-    if (!tasks) return;
 
-    displayTasks(tasks);
-    displayState = DisplayState.VIEW_Tasks;
+    const selected = document.querySelector('#items-options input[name="display-mode"]:checked');
+    displayChosenContent(selected.value);
     projectsInfoDisplay.textContent = getProjectName();
     backButton.disabled = false;
 }
 
 /**
  * @param {module:projectService.ProjectSummary} projectData
- * @returns HTMLDivElement
+ * @returns {HTMLDivElement}
  */
 function generateProjectCard(projectData) {
     const card = document.createElement("div");
@@ -103,6 +155,7 @@ function generateProjectCard(projectData) {
 
 /**
  * @param {module:projectService.TaskSummary} taskSummary
+ * @returns {HTMLDivElement}
  */
 function generateTaskCard(taskSummary) {
     const card = document.createElement("div");
@@ -135,6 +188,27 @@ function generateTaskCard(taskSummary) {
 }
 
 /**
+ *
+ * @param {module:note.Note} note
+ * @returns {HTMLDivElement}
+ */
+function generateNoteCard(note) {
+    const card = document.createElement("div");
+    const heading = document.createElement("h3");
+    const content = document.createElement("p");
+
+    heading.textContent = note.title;
+    content.textContent = note.content;
+
+    card.dataset.noteId = note.id;
+    card.setAttribute("class", "note-card");
+
+    card.append(heading, content);
+
+    return card;
+}
+
+/**
  * Displays cards in projects container
  * @param {Array<any>} cardsData The data from which cards will be made of.
  * @param {Function} generateCard A function that takes card data and returns a card element.
@@ -153,6 +227,7 @@ function displayCards(cardsData, generateCard) {
  * @param {Array<module:projectService.ProjectSummary>} summaries
  */
 function displayProjects(summaries) {
+    if (!summaries) return;
     displayCards(summaries, generateProjectCard);
 }
 
@@ -160,7 +235,16 @@ function displayProjects(summaries) {
  * @param {Array<module:projectService.TaskSummary>} summaries
  */
 function displayTasks(summaries) {
+    if (!summaries) return;
     displayCards(summaries, generateTaskCard);
+}
+
+/**
+ * @param {Array<module:note.Note>} notes
+ */
+function displayNotes(notes) {
+    if (!notes) return;
+    displayCards(notes, generateNoteCard);
 }
 
 export {displayProjects};
