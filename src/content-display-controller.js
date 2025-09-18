@@ -10,19 +10,21 @@ import {
 import {pubSub} from "./pub-sub.js";
 import {EventType} from "./enums/event-type.js";
 import {DisplayState} from "./enums/display-state.js";
+import {SortBy} from "./enums/sort-by";
+import {sortedTasks} from "./task-filter-service";
 
 /**
  * @module contentDisplayController responsible for UI interaction in the main section of the page.
  * Enables viewing projects and their contents.
  */
 
-// TODO: switch between viewing notes and tasks in selected project, update UI on note creation (subscribe)
-
 let displayState = DisplayState.VIEW_PROJECTS;
 
 const projectsContainer = document.querySelector("#projects-container");
 const projectsInfoDisplay = document.querySelector("#projects-info h2");
 const backButton = document.querySelector("#btn-back");
+
+const tasksOrderInput = document.querySelector("#tasks-ordering");
 
 projectsContainer.addEventListener("click", (event) => {
    if (event.target.dataset.projectId) {
@@ -31,6 +33,7 @@ projectsContainer.addEventListener("click", (event) => {
 });
 
 document.querySelector("#items-options").addEventListener("click", swapProjectContent);
+document.querySelector("#sorting-options").addEventListener("click", swapSortedTasks);
 
 // come back to all projects
 backButton.addEventListener("click", () => {
@@ -59,16 +62,7 @@ pubSub.subscribe(EventType.TASK_CREATED, (data) => {
     if (displayState === DisplayState.VIEW_PROJECTS) {
         displayProjects(getAllProjects());
     } else if (displayState === DisplayState.VIEW_Tasks && data.projectId === getSelectedProjectId()) {
-        const summary =  {
-            title: data.task.title,
-            dueDate: data.task.dueDate,
-            status: data.task.status,
-            priority: data.task.priority,
-            id: data.id,
-        };
-
-        const taskCard = generateTaskCard(summary);
-        projectsContainer.appendChild(taskCard);
+        displayTasks(getAllTasks());
     }
 });
 
@@ -87,6 +81,13 @@ pubSub.subscribe(EventType.NOTE_CREATED, (data) => {
    }
 });
 
+function swapSortedTasks(e) {
+    if (displayState !== DisplayState.VIEW_Tasks) return;
+    if (e.target.tagName !== "INPUT" && e.target.tagName !== "LABEL") return;
+
+    displayTasks(getAllTasks());
+}
+
 /**
  *
  * @param {Event} e
@@ -95,9 +96,9 @@ function swapProjectContent(e) {
     if (displayState === DisplayState.VIEW_PROJECTS) return;
     if (e.target.tagName !== "INPUT" &&  e.target.tagName !== "LABEL") return;
 
-    const selected = document.querySelector('#items-options input[name="display-mode"]:checked');
+    const selectedOption = document.querySelector('#items-options input[name="display-mode"]:checked');
 
-    displayChosenContent(selected.value);
+    displayChosenContent(selectedOption.value);
 }
 
 /**
@@ -121,8 +122,8 @@ function displayChosenContent(selectedValue) {
 function openProject(projectId) {
     selectProject(projectId);
 
-    const selected = document.querySelector('#items-options input[name="display-mode"]:checked');
-    displayChosenContent(selected.value);
+    const selectedOption = document.querySelector('#items-options input[name="display-mode"]:checked');
+    displayChosenContent(selectedOption.value);
     projectsInfoDisplay.textContent = getProjectName();
     backButton.disabled = false;
 }
@@ -236,7 +237,19 @@ function displayProjects(summaries) {
  */
 function displayTasks(summaries) {
     if (!summaries) return;
-    displayCards(summaries, generateTaskCard);
+
+    const selectedSortingOption = document.querySelector('#sorting-options input[name="sorting-mode"]:checked');
+
+    let tasksToDisplay;
+    try {
+        const sortBy = /** @type SortBy */ SortBy.fromString(selectedSortingOption.value);
+        const ascending= tasksOrderInput.checked;
+        tasksToDisplay = sortedTasks(summaries, sortBy, ascending);
+    } catch (error) {
+        tasksToDisplay = summaries;
+    }
+
+    displayCards(tasksToDisplay, generateTaskCard);
 }
 
 /**
