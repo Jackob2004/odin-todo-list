@@ -232,35 +232,6 @@ function getAllTasks() {
         })
     );
 }
-// TODO: move sorting and filtering to a separate module to make projectService provide raw data only
-/**
- *
- * @param {SortBy} sortBy
- * @param {boolean} ascending determines order
- * @returns {Array<module:projectService.TaskSummary>|null} tasks in a sorted manner or null if no project is selected
- */
-function getAllTasksSorted(sortBy, ascending) {
-    if (!sortBy || !ascending) return null;
-
-    const unsortedTasks = getAllTasks();
-    if (!unsortedTasks) return null;
-
-    const sortedTasks = unsortedTasks.sort(sortBy.comparator);
-
-    return ascending ? sortedTasks : sortedTasks.reverse();
-}
-
-/**
- * @param {Array<module:projectService.TaskSummary>} allTasks the array to filter
- * @returns {Array<module:projectService.TaskSummary>|null} overdue tasks or null if provided argument is not valid
- */
-function getOverdueTasks(allTasks) {
-    if (!allTasks) return null;
-
-    const currentTime= new Date().getTime();
-
-    return allTasks.filter((task) => task.dueDate.getTime() < currentTime);
-}
 
 /**
  * @returns {Array<module:note.Note>|null} notes in currently selected project or null if no project is selected
@@ -346,8 +317,6 @@ export {
     getAllProjects,
     getAllTasks,
     getAllNotes,
-    getAllTasksSorted,
-    getOverdueTasks,
     getTaskDetails,
     selectProject,
     leaveProject,
