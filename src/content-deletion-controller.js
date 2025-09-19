@@ -1,6 +1,6 @@
 import {pubSub} from "./pub-sub";
 import {EventType} from "./enums/event-type";
-import {deleteProject, getProjectName} from "./project-service";
+import {deleteProject, deleteTask, getProjectName, getTaskName} from "./project-service";
 
 /**
  * @module contentDeletionController
@@ -12,14 +12,28 @@ const projectDeleteWindow = document.querySelector("#delete-project-window");
 const projectDeleteNameDisplay = document.querySelector("#delete-project-name");
 const projectDeleteConfirm = document.querySelector("#btn-confirm-project-deletion");
 
+const taskDeleteWindow = document.querySelector("#delete-task-window");
+const taskDeleteNameDisplay = document.querySelector("#delete-task-name");
+const taskDeleteConfirm  =document.querySelector("#btn-confirm-task-deletion");
+
 document.querySelector("#btn-cancel-project-deletion").addEventListener("click", () => projectDeleteWindow.close());
 projectDeleteConfirm.addEventListener("click", handleProjectDeletion);
+
+document.querySelector("#btn-cancel-task-deletion").addEventListener("click", () => taskDeleteWindow.close());
+taskDeleteConfirm.addEventListener("click", handleTaskDeletion);
 
 pubSub.subscribe(EventType.PROJECT_DELETE_REQUESTED, (projectId) => {
     projectDeleteNameDisplay.textContent = getProjectName(projectId);
     projectDeleteConfirm.dataset.projectId = projectId;
 
     projectDeleteWindow.showModal();
+});
+
+pubSub.subscribe(EventType.TASK_DELETE_REQUESTED, (taskId) => {
+    taskDeleteNameDisplay.textContent = getTaskName(taskId);
+    taskDeleteConfirm.dataset.taskId = taskId;
+
+    taskDeleteWindow.showModal();
 });
 
 /**
@@ -33,6 +47,19 @@ function handleProjectDeletion(e) {
 
     projectDeleteWindow.close();
     pubSub.publish(EventType.PROJECT_DELETED, id);
+}
+
+/**
+ *
+ * @param {Event} e
+ */
+function handleTaskDeletion(e) {
+    const id = e.target.dataset.taskId;
+
+    if (!deleteTask(id)) return;
+
+    taskDeleteWindow.close();
+    pubSub.publish(EventType.TASK_DELETED, id);
 }
 
 

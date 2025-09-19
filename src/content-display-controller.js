@@ -42,6 +42,9 @@ projectsContainer.addEventListener("click", (event) => {
         case CardAction.DELETE_PROJECT:
             pubSub.publish(EventType.PROJECT_DELETE_REQUESTED, id);
             break;
+        case CardAction.DELETE_TASK:
+            pubSub.publish(EventType.TASK_DELETE_REQUESTED, id);
+            break;
     }
 
 });
@@ -96,11 +99,17 @@ pubSub.subscribe(EventType.NOTE_CREATED, (data) => {
    }
 });
 
-pubSub.subscribe(EventType.PROJECT_DELETED, (data) => {
+pubSub.subscribe(EventType.PROJECT_DELETED, () => {
     if (displayState !== DisplayState.VIEW_PROJECTS) return;
 
     displayProjects(getAllProjects());
 });
+
+pubSub.subscribe(EventType.TASK_DELETED, () => {
+    if (displayState !== DisplayState.VIEW_Tasks) return;
+
+    displayTasks(getAllTasks());
+})
 
 /**
  *
@@ -210,8 +219,11 @@ function generateTaskCard(taskSummary) {
     heading.textContent = taskSummary.title;
     dateInfo.textContent = taskSummary.dueDate.toLocaleDateString();
     deleteButton.textContent = "X";
+    deleteButton.dataset.id = taskSummary.id;
+    deleteButton.dataset.action = CardAction.DELETE_TASK.name;
 
-    card.dataset.taskId = taskSummary.id;
+    card.dataset.id = taskSummary.id;
+    card.dataset.action = CardAction.OPEN_TASK.name;
     card.setAttribute("class", "task-card");
 
     card.append(heading, selectStatus, dateInfo, deleteButton);
