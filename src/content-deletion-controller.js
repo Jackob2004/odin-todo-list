@@ -1,6 +1,6 @@
 import {pubSub} from "./pub-sub";
 import {EventType} from "./enums/event-type";
-import {deleteProject, deleteTask, getProjectName, getTaskName} from "./project-service";
+import {deleteNote, deleteProject, deleteTask, getNoteName, getProjectName, getTaskName} from "./project-service";
 
 /**
  * @module contentDeletionController
@@ -14,13 +14,20 @@ const projectDeleteConfirm = document.querySelector("#btn-confirm-project-deleti
 
 const taskDeleteWindow = document.querySelector("#delete-task-window");
 const taskDeleteNameDisplay = document.querySelector("#delete-task-name");
-const taskDeleteConfirm  =document.querySelector("#btn-confirm-task-deletion");
+const taskDeleteConfirm = document.querySelector("#btn-confirm-task-deletion");
+
+const noteDeleteWindow = document.querySelector("#delete-note-window");
+const noteDeleteNameDisplay = document.querySelector("#delete-note-name");
+const noteDeleteConfirm = document.querySelector("#btn-confirm-note-deletion");
 
 document.querySelector("#btn-cancel-project-deletion").addEventListener("click", () => projectDeleteWindow.close());
 projectDeleteConfirm.addEventListener("click", handleProjectDeletion);
 
 document.querySelector("#btn-cancel-task-deletion").addEventListener("click", () => taskDeleteWindow.close());
 taskDeleteConfirm.addEventListener("click", handleTaskDeletion);
+
+document.querySelector("#btn-cancel-note-deletion").addEventListener("click", () => noteDeleteWindow.close());
+noteDeleteConfirm.addEventListener("click", handleNoteDeletion);
 
 pubSub.subscribe(EventType.PROJECT_DELETE_REQUESTED, (projectId) => {
     projectDeleteNameDisplay.textContent = getProjectName(projectId);
@@ -34,6 +41,13 @@ pubSub.subscribe(EventType.TASK_DELETE_REQUESTED, (taskId) => {
     taskDeleteConfirm.dataset.taskId = taskId;
 
     taskDeleteWindow.showModal();
+});
+
+pubSub.subscribe(EventType.NOTE_DELETE_REQUESTED, (noteId) => {
+    noteDeleteNameDisplay.textContent = getNoteName(noteId)
+    noteDeleteConfirm.dataset.noteId = noteId;
+
+    noteDeleteWindow.showModal();
 });
 
 /**
@@ -60,6 +74,19 @@ function handleTaskDeletion(e) {
 
     taskDeleteWindow.close();
     pubSub.publish(EventType.TASK_DELETED, id);
+}
+
+/**
+ *
+ * @param {Event} e
+ */
+function handleNoteDeletion(e) {
+    const id = e.target.dataset.noteId;
+
+    if (!deleteNote(id)) return;
+
+    noteDeleteWindow.close();
+    pubSub.publish(EventType.NOTE_DELETED, id);
 }
 
 

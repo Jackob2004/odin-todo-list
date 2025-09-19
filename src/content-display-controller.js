@@ -45,6 +45,9 @@ projectsContainer.addEventListener("click", (event) => {
         case CardAction.DELETE_TASK:
             pubSub.publish(EventType.TASK_DELETE_REQUESTED, id);
             break;
+        case CardAction.DELETE_NOTE:
+            pubSub.publish(EventType.NOTE_DELETE_REQUESTED, id);
+            break;
     }
 
 });
@@ -109,7 +112,13 @@ pubSub.subscribe(EventType.TASK_DELETED, () => {
     if (displayState !== DisplayState.VIEW_Tasks) return;
 
     displayTasks(getAllTasks());
-})
+});
+
+pubSub.subscribe(EventType.NOTE_DELETED, () => {
+    if (displayState !== DisplayState.VIEW_Notes) return;
+
+    displayNotes(getAllNotes());
+});
 
 /**
  *
@@ -239,15 +248,19 @@ function generateTaskCard(taskSummary) {
 function generateNoteCard(note) {
     const card = document.createElement("div");
     const heading = document.createElement("h3");
+    const deleteButton = document.createElement("button");
     const content = document.createElement("p");
 
     heading.textContent = note.title;
+    deleteButton.textContent = "x";
+    deleteButton.dataset.id = note.id;
+    deleteButton.dataset.action = CardAction.DELETE_NOTE.name;
     content.textContent = note.content;
 
     card.dataset.noteId = note.id;
     card.setAttribute("class", "note-card");
 
-    card.append(heading, content);
+    card.append(heading, deleteButton, content);
 
     return card;
 }

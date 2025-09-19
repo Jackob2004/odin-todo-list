@@ -210,6 +210,21 @@ function getTaskName(taskId) {
 
 /**
  *
+ * @param {string} noteId
+ * @returns {string|null} null if no project is opened or note doesn't exist
+ */
+function getNoteName(noteId) {
+    if (!projects.has(selectedProjectId)) return null;
+
+    const note = projects.get(selectedProjectId).notes.get(noteId);
+
+    if (!note) return null;
+
+    return note.title;
+}
+
+/**
+ *
  * @returns {string|null} id or nll if no project is currently selected
  */
 function getSelectedProjectId() {
@@ -329,6 +344,7 @@ export {
     editNote,
     getProjectName,
     getTaskName,
+    getNoteName,
     getSelectedProjectId,
     getAllProjects,
     getAllTasks,
