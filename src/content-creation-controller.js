@@ -9,7 +9,7 @@ import {createNote} from "./model/note";
 
 /**
  * @module contentCreationController
- * Handles UI interactions for creating new content (tasks, projects, notes)
+ * @description Handles UI interactions for creating new content (tasks, projects, notes)
  * including modal dialogs and publishing creation events via PubSub
  */
 

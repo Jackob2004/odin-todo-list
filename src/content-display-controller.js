@@ -12,9 +12,11 @@ import {EventType} from "./enums/event-type.js";
 import {DisplayState} from "./enums/display-state.js";
 import {SortBy} from "./enums/sort-by";
 import {filteredOverdueTasks, sortedTasks} from "./task-filter-service";
+import {CardAction} from "./enums/card-action";
 
 /**
- * @module contentDisplayController responsible for UI interaction in the main section of the page.
+ * @module contentDisplayController
+ * @description Responsible for UI interaction in the main section of the page.
  * Enables viewing projects and their contents.
  */
 
@@ -28,9 +30,20 @@ const tasksOrderInput = document.querySelector("#tasks-ordering");
 const tasksFilterInput = document.querySelector("#tasks-filtering");
 
 projectsContainer.addEventListener("click", (event) => {
-   if (event.target.dataset.projectId) {
-       openProject(event.target.dataset.projectId);
-   }
+    const id= event.target.dataset.id;
+    if (!id) return;
+
+    const action = CardAction.fromString(event.target.dataset.action);
+
+    switch (action) {
+        case CardAction.OPEN_PROJECT:
+            openProject(id);
+            break;
+        case CardAction.DELETE_PROJECT:
+            pubSub.publish(EventType.PROJECT_DELETE_REQUESTED, id);
+            break;
+    }
+
 });
 
 document.querySelector("#items-options").addEventListener("click", swapProjectContent);
@@ -81,6 +94,12 @@ pubSub.subscribe(EventType.NOTE_CREATED, (data) => {
        const noteCard = generateNoteCard(note);
        projectsContainer.appendChild(noteCard);
    }
+});
+
+pubSub.subscribe(EventType.PROJECT_DELETED, (data) => {
+    if (displayState !== DisplayState.VIEW_PROJECTS) return;
+
+    displayProjects(getAllProjects());
 });
 
 /**
@@ -142,20 +161,26 @@ function generateProjectCard(projectData) {
     const card = document.createElement("div");
 
     const heading = document.createElement("h3");
+    const deleteButton = document.createElement("button");
 
     const itemsInfoWrapper = document.createElement("div");
     const totalTasks = document.createElement("p");
     const totalNotes = document.createElement("p");
 
     heading.textContent = projectData.title;
+    deleteButton.textContent = "x";
     totalTasks.textContent = "Tasks: " + projectData.tasks;
     totalNotes.textContent = "Notes: " + projectData.notes;
 
-    card.dataset.projectId = projectData.id;
+    deleteButton.dataset.action = CardAction.DELETE_PROJECT.name;
+    deleteButton.dataset.id = projectData.id;
+
+    card.dataset.id = projectData.id;
+    card.dataset.action = CardAction.OPEN_PROJECT.name;
     card.setAttribute("class", "project-card");
 
     itemsInfoWrapper.append(totalTasks, totalNotes);
-    card.append(heading, itemsInfoWrapper);
+    card.append(heading, deleteButton, itemsInfoWrapper);
 
     return card;
 }
