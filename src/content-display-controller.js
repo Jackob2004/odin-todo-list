@@ -5,7 +5,7 @@ import {
     getAllProjects,
     getProjectName,
     getSelectedProjectId,
-    leaveProject, getAllNotes,
+    leaveProject, getAllNotes, editTaskStatus,
 } from "./project-service.js";
 import {pubSub} from "./pub-sub.js";
 import {EventType} from "./enums/event-type.js";
@@ -47,6 +47,9 @@ projectsContainer.addEventListener("click", (event) => {
             break;
         case CardAction.DELETE_NOTE:
             pubSub.publish(EventType.NOTE_DELETE_REQUESTED, id);
+            break;
+        case CardAction.CHANGE_TASK_STATUS:
+            changeTaskStatus(event.target.value, id);
             break;
     }
 
@@ -172,6 +175,20 @@ function openProject(projectId) {
 }
 
 /**
+ *
+ * @param {string} value status in string form
+ * @param {string} id
+ */
+function changeTaskStatus(value, id) {
+    if (displayState !== DisplayState.VIEW_Tasks) return;
+    const updatedStatus = /** @type Status */ Status.fromString(value);
+
+    if (!editTaskStatus(id, updatedStatus)) return;
+
+    displayTasks(getAllTasks());
+}
+
+/**
  * @param {module:projectService.ProjectSummary} projectData
  * @returns {HTMLDivElement}
  */
@@ -226,6 +243,8 @@ function generateTaskCard(taskSummary) {
     }
 
     heading.textContent = taskSummary.title;
+    selectStatus.dataset.id = taskSummary.id;
+    selectStatus.dataset.action = CardAction.CHANGE_TASK_STATUS.name;
     dateInfo.textContent = taskSummary.dueDate.toLocaleDateString();
     deleteButton.textContent = "X";
     deleteButton.dataset.id = taskSummary.id;
