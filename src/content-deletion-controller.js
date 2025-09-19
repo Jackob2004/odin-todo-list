@@ -21,73 +21,59 @@ const noteDeleteNameDisplay = document.querySelector("#delete-note-name");
 const noteDeleteConfirm = document.querySelector("#btn-confirm-note-deletion");
 
 document.querySelector("#btn-cancel-project-deletion").addEventListener("click", () => projectDeleteWindow.close());
-projectDeleteConfirm.addEventListener("click", handleProjectDeletion);
+projectDeleteConfirm.addEventListener("click", (e) => {
+    handleDeletion(e, deleteProject, projectDeleteWindow, EventType.PROJECT_DELETED);
+});
 
 document.querySelector("#btn-cancel-task-deletion").addEventListener("click", () => taskDeleteWindow.close());
-taskDeleteConfirm.addEventListener("click", handleTaskDeletion);
+taskDeleteConfirm.addEventListener("click", (e) => {
+    handleDeletion(e, deleteTask, taskDeleteWindow, EventType.TASK_DELETED);
+});
 
 document.querySelector("#btn-cancel-note-deletion").addEventListener("click", () => noteDeleteWindow.close());
-noteDeleteConfirm.addEventListener("click", handleNoteDeletion);
+noteDeleteConfirm.addEventListener("click", (e) => {
+    handleDeletion(e, deleteNote, noteDeleteWindow, EventType.NOTE_DELETED);
+});
 
 pubSub.subscribe(EventType.PROJECT_DELETE_REQUESTED, (projectId) => {
-    projectDeleteNameDisplay.textContent = getProjectName(projectId);
-    projectDeleteConfirm.dataset.projectId = projectId;
-
-    projectDeleteWindow.showModal();
+    openDeletionWindow(projectDeleteNameDisplay, projectId, getProjectName, projectDeleteConfirm, projectDeleteWindow);
 });
 
 pubSub.subscribe(EventType.TASK_DELETE_REQUESTED, (taskId) => {
-    taskDeleteNameDisplay.textContent = getTaskName(taskId);
-    taskDeleteConfirm.dataset.taskId = taskId;
-
-    taskDeleteWindow.showModal();
+    openDeletionWindow(taskDeleteNameDisplay, taskId, getTaskName, taskDeleteConfirm, taskDeleteWindow);
 });
 
 pubSub.subscribe(EventType.NOTE_DELETE_REQUESTED, (noteId) => {
-    noteDeleteNameDisplay.textContent = getNoteName(noteId)
-    noteDeleteConfirm.dataset.noteId = noteId;
-
-    noteDeleteWindow.showModal();
+    openDeletionWindow(noteDeleteNameDisplay, noteId, getNoteName, noteDeleteConfirm, noteDeleteWindow);
 });
 
 /**
  *
- * @param {Event} e
+ * @param {Element} nameDisplay
+ * @param {string} id
+ * @param {Function} callback
+ * @param {HTMLButtonElement} confirmBtn
+ * @param {HTMLDialogElement} deletionWindow
  */
-function handleProjectDeletion(e) {
-    const id = e.target.dataset.projectId;
+function openDeletionWindow(nameDisplay, id, callback, confirmBtn, deletionWindow) {
+    nameDisplay.textContent = callback(id);
+    confirmBtn.dataset.id = id;
 
-    if (!deleteProject(id)) return;
-
-    projectDeleteWindow.close();
-    pubSub.publish(EventType.PROJECT_DELETED, id);
+    deletionWindow.showModal();
 }
 
 /**
  *
  * @param {Event} e
+ * @param {Function} callback
+ * @param {HTMLDialogElement} windowToClose
+ * @param {EventType} eventToPublish
  */
-function handleTaskDeletion(e) {
-    const id = e.target.dataset.taskId;
+function handleDeletion(e, callback, windowToClose, eventToPublish) {
+    const id = e.target.dataset.id;
 
-    if (!deleteTask(id)) return;
+    if (!callback(id)) return;
 
-    taskDeleteWindow.close();
-    pubSub.publish(EventType.TASK_DELETED, id);
+    windowToClose.close();
+    pubSub.publish(eventToPublish, id);
 }
-
-/**
- *
- * @param {Event} e
- */
-function handleNoteDeletion(e) {
-    const id = e.target.dataset.noteId;
-
-    if (!deleteNote(id)) return;
-
-    noteDeleteWindow.close();
-    pubSub.publish(EventType.NOTE_DELETED, id);
-}
-
-
-
