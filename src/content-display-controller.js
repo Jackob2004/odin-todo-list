@@ -248,6 +248,7 @@ function generateTaskCard(taskSummary) {
     const selectStatus = document.createElement("select");
     const dateInfo = document.createElement("p");
     const deleteButton = document.createElement("button");
+    const editButton = document.createElement("button");
 
     for (const status of Object.values(Status)) {
         const option = document.createElement("option");
@@ -264,15 +265,20 @@ function generateTaskCard(taskSummary) {
     selectStatus.dataset.id = taskSummary.id;
     selectStatus.dataset.action = CardAction.CHANGE_TASK_STATUS.name;
     dateInfo.textContent = taskSummary.dueDate.toLocaleDateString();
+
     deleteButton.textContent = "X";
     deleteButton.dataset.id = taskSummary.id;
     deleteButton.dataset.action = CardAction.DELETE_TASK.name;
 
+    editButton.textContent = "edit";
+    editButton.dataset.id = taskSummary.id;
+    editButton.dataset.action = CardAction.EDIT_TASK.name;
+
     card.dataset.id = taskSummary.id;
-    card.dataset.action = CardAction.EDIT_TASK.name;
+    card.dataset.action = CardAction.OPEN_TASK.name;
     card.setAttribute("class", "task-card");
 
-    card.append(heading, selectStatus, dateInfo, deleteButton);
+    card.append(heading, selectStatus, dateInfo, deleteButton, editButton);
 
     return card;
 }
@@ -286,19 +292,25 @@ function generateNoteCard(note) {
     const card = document.createElement("div");
     const heading = document.createElement("h3");
     const deleteButton = document.createElement("button");
+    const editButton = document.createElement("button");
     const content = document.createElement("p");
 
     heading.textContent = note.title;
+    content.textContent = note.content;
+
     deleteButton.textContent = "x";
     deleteButton.dataset.id = note.id;
     deleteButton.dataset.action = CardAction.DELETE_NOTE.name;
-    content.textContent = note.content;
+
+    editButton.textContent = "edit";
+    editButton.dataset.id = note.id;
+    editButton.dataset.action = CardAction.EDIT_NOTE.name;
 
     card.dataset.id = note.id;
-    card.dataset.action = CardAction.EDIT_NOTE.name;
+    card.dataset.action = CardAction.OPEN_NOTE.name;
     card.setAttribute("class", "note-card");
 
-    card.append(heading, deleteButton, content);
+    card.append(heading, deleteButton, editButton, content);
 
     return card;
 }

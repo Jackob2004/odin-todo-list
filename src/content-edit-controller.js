@@ -5,7 +5,7 @@ import {Priority} from "./enums/priority";
 
 /**
  * @module contentEditController
- * @description Handles UI interactions and requests for content edits (tasks, projects, notes)
+ * @description Handles UI interactions and requests for content edits (tasks, notes)
  * including modal dialogs and publishing edit events via PubSub
  */
 

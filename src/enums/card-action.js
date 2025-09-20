@@ -8,6 +8,7 @@ import {Enum} from "./enum";
 class CardAction extends Enum {
     static OPEN_PROJECT = new CardAction("Open Project");
     static OPEN_TASK = new CardAction("Open Task");
+    static OPEN_NOTE = new CardAction("Open Note");
     static DELETE_PROJECT = new CardAction("Delete Project");
     static DELETE_TASK = new CardAction("Delete Task");
     static DELETE_NOTE = new CardAction("Delete Note");
