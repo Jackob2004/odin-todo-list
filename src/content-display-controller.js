@@ -54,6 +54,9 @@ projectsContainer.addEventListener("click", (event) => {
         case CardAction.EDIT_NOTE:
             pubSub.publish(EventType.NOTE_EDIT_REQUESTED, id);
             break;
+        case CardAction.EDIT_TASK:
+            pubSub.publish(EventType.TASK_EDIT_REQUESTED, id);
+            break;
     }
 
 });
@@ -130,6 +133,12 @@ pubSub.subscribe(EventType.NOTE_EDITED, () => {
     if (displayState !== DisplayState.VIEW_Notes) return;
 
     displayNotes(getAllNotes());
+});
+
+pubSub.subscribe(EventType.TASK_EDITED, () => {
+    if (displayState !== DisplayState.VIEW_Tasks) return;
+
+    displayTasks(getAllTasks());
 });
 
 /**
@@ -260,7 +269,7 @@ function generateTaskCard(taskSummary) {
     deleteButton.dataset.action = CardAction.DELETE_TASK.name;
 
     card.dataset.id = taskSummary.id;
-    card.dataset.action = CardAction.OPEN_TASK.name;
+    card.dataset.action = CardAction.EDIT_TASK.name;
     card.setAttribute("class", "task-card");
 
     card.append(heading, selectStatus, dateInfo, deleteButton);
