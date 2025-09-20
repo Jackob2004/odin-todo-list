@@ -118,6 +118,40 @@
         </div>
     </dialog>
 
+    <dialog id="edit-task-window">
+        <h3>Edit Task</h3>
+        <p>Project: <span id="edit-task-project-name"></span></p>
+
+        <form method="dialog">
+            <p>Required fields are followed by <strong><span aria-label="required">*</span></strong>.</p>
+
+            <label for="edit-task-title-field">Title<strong><span aria-label="required">*</span></strong></label>
+            <input type="text" name="title" id="edit-task-title-field" autofocus maxlength="20" required>
+
+            <label for="edit-task-description-field">Description<strong><span aria-label="required">*</span></strong></label>
+            <textarea name="description" id="edit-task-description-field" rows="5" cols="33" maxlength="50" required></textarea>
+
+            <label for="edit-task-date-field">Due Date<strong><span aria-label="required">*</span></strong></label>
+            <input type="date" name="date" id="edit-task-date-field" required>
+
+            <label for="edit-task-priority-field">Priority<strong><span aria-label="required">*</span></strong></label>
+            <select name="priority" id="edit-task-priority-field" required>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Urgent">Urgent</option>
+            </select>
+
+            <label for="edit-task-track-field">Trackable</label>
+            <input type="checkbox" name="track" id="edit-task-track-field" checked>
+
+            <div>
+                <button type="button" id="btn-cancel-task-edit" formnovalidate>Cancel</button>
+                <button type="submit">Confirm</button>
+            </div>
+        </form>
+    </dialog>
+
     <dialog id="edit-note-window">
         <h3>Edit Note</h3>
         <p>Project: <span id="edit-note-project-name"></span></p>
