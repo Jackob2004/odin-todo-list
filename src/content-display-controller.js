@@ -51,6 +51,9 @@ projectsContainer.addEventListener("click", (event) => {
         case CardAction.CHANGE_TASK_STATUS:
             changeTaskStatus(event.target.value, id);
             break;
+        case CardAction.EDIT_NOTE:
+            pubSub.publish(EventType.NOTE_EDIT_REQUESTED, id);
+            break;
     }
 
 });
@@ -118,6 +121,12 @@ pubSub.subscribe(EventType.TASK_DELETED, () => {
 });
 
 pubSub.subscribe(EventType.NOTE_DELETED, () => {
+    if (displayState !== DisplayState.VIEW_Notes) return;
+
+    displayNotes(getAllNotes());
+});
+
+pubSub.subscribe(EventType.NOTE_EDITED, () => {
     if (displayState !== DisplayState.VIEW_Notes) return;
 
     displayNotes(getAllNotes());
@@ -276,7 +285,8 @@ function generateNoteCard(note) {
     deleteButton.dataset.action = CardAction.DELETE_NOTE.name;
     content.textContent = note.content;
 
-    card.dataset.noteId = note.id;
+    card.dataset.id = note.id;
+    card.dataset.action = CardAction.EDIT_NOTE.name;
     card.setAttribute("class", "note-card");
 
     card.append(heading, deleteButton, content);

@@ -12,6 +12,7 @@ class CardAction extends Enum {
     static DELETE_TASK = new CardAction("Delete Task");
     static DELETE_NOTE = new CardAction("Delete Note");
     static CHANGE_TASK_STATUS = new CardAction("Change Task Status");
+    static EDIT_NOTE = new CardAction("Edit Note");
 }
 
 export {CardAction};
