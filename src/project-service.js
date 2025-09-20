@@ -296,6 +296,21 @@ function getTaskDetails(taskId) {
 
 /**
  *
+ * @param noteId
+ * @returns {module:note.Note|null} note if it exists in currently selected project null otherwise
+ */
+function getNote(noteId) {
+    if (!projects.has(selectedProjectId)) return null;
+
+    const note = projects.get(selectedProjectId).notes.get(noteId);
+
+    if (!note) return null;
+
+    return note;
+}
+
+/**
+ *
  * @param {string} projectId
  * @returns {boolean} true if operation was successful
  */
@@ -350,6 +365,7 @@ export {
     getAllTasks,
     getAllNotes,
     getTaskDetails,
+    getNote,
     selectProject,
     leaveProject,
     loadProjects,
