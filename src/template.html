@@ -118,6 +118,26 @@
         </div>
     </dialog>
 
+    <dialog id="edit-note-window">
+        <h3>Edit Note</h3>
+        <p>Project: <span id="edit-note-project-name"></span></p>
+
+        <form method="dialog">
+            <p>Required fields are followed by <strong><span aria-label="required">*</span></strong>.</p>
+
+            <label for="edit-note-title-field">Title<strong><span aria-label="required">*</span></strong></label>
+            <input type="text" name="title" id="edit-note-title-field" autofocus maxlength="20" required>
+
+            <label for="edit-note-description-field">Description<strong><span aria-label="required">*</span></strong></label>
+            <textarea name="description" id="edit-note-description-field" rows="5" cols="33" maxlength="70" required></textarea>
+
+            <div>
+                <button type="button" id="btn-cancel-note-edit" formnovalidate>Cancel</button>
+                <button type="submit" id="btn-confirm-note-edit">Confirm</button>
+            </div>
+        </form>
+    </dialog>
+
     <div id="sidebar">
         <h1>Todo List</h1>
 
