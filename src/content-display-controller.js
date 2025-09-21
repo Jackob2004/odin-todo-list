@@ -39,6 +39,12 @@ projectsContainer.addEventListener("click", (event) => {
         case CardAction.OPEN_PROJECT:
             openProject(id);
             break;
+        case CardAction.VIEW_TASK:
+            pubSub.publish(EventType.TASK_VIEW_REQUESTED, id);
+            break;
+        case CardAction.VIEW_NOTE:
+            pubSub.publish(EventType.NOTE_VIEW_REQUESTED, id);
+            break;
         case CardAction.DELETE_PROJECT:
             pubSub.publish(EventType.PROJECT_DELETE_REQUESTED, id);
             break;
@@ -275,7 +281,7 @@ function generateTaskCard(taskSummary) {
     editButton.dataset.action = CardAction.EDIT_TASK.name;
 
     card.dataset.id = taskSummary.id;
-    card.dataset.action = CardAction.OPEN_TASK.name;
+    card.dataset.action = CardAction.VIEW_TASK.name;
     card.setAttribute("class", "task-card");
 
     card.append(heading, selectStatus, dateInfo, deleteButton, editButton);
@@ -307,7 +313,7 @@ function generateNoteCard(note) {
     editButton.dataset.action = CardAction.EDIT_NOTE.name;
 
     card.dataset.id = note.id;
-    card.dataset.action = CardAction.OPEN_NOTE.name;
+    card.dataset.action = CardAction.VIEW_NOTE.name;
     card.setAttribute("class", "note-card");
 
     card.append(heading, deleteButton, editButton, content);

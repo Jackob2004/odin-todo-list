@@ -18,6 +18,8 @@ class EventType extends Enum {
     static NOTE_EDITED = new EventType("Note Edit");
     static TASK_EDIT_REQUESTED = new EventType("Task Edit Request");
     static TASK_EDITED = new EventType("Task Edit");
+    static TASK_VIEW_REQUESTED = new EventType("Task View Request");
+    static NOTE_VIEW_REQUESTED = new EventType("Task View Request");
 }
 
 export {EventType};
