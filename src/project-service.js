@@ -1,4 +1,5 @@
 import {createProject} from "./model/project.js";
+import * as storage from "./storage-service.js";
 
 /**
  * @module projectService responsible for managing projects and their corresponding contents
@@ -52,6 +53,8 @@ let selectedProjectId = null;
  */
 function addProject(project) {
     if (!project) return false;
+    if (!storage.saveProject(project)) return false;
+
     projects.set(project.id, project);
 
     return true;
@@ -66,7 +69,14 @@ function addProject(project) {
 function addTask(task, projectId = selectedProjectId) {
     if (!projects.has(projectId) || !task) return false;
 
-    projects.get(projectId).tasks.set(task.id, task);
+    const project = projects.get(projectId);
+    project.tasks.set(task.id, task);
+
+    if (!storage.saveProject(project)) {
+        project.tasks.delete(task.id);
+        console.error("Failed to save task. In-memory state has been reverted.");
+        return false;
+    }
 
     return true;
 }
@@ -80,7 +90,14 @@ function addTask(task, projectId = selectedProjectId) {
 function addNote(note, projectId = selectedProjectId) {
     if (!projects.has(projectId) || !note) return false;
 
-    projects.get(projectId).notes.set(note.id, note);
+    const project = projects.get(projectId);
+    project.notes.set(note.id, note);
+
+    if (!storage.saveProject(project)) {
+        project.notes.delete(note.id);
+        console.error("Failed to save task. In-memory state has been reverted.");
+        return false;
+    }
 
     return true;
 }
