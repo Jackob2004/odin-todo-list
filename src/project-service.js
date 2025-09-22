@@ -108,6 +108,7 @@ function addNote(note, projectId = selectedProjectId) {
  * @returns {boolean} true if operation was successful
  */
 function deleteProject(projectId) {
+    if (!storage.removeProject(projectId)) return false;
     const existed = projects.delete(projectId);
 
     if (existed && projectId === selectedProjectId) {
@@ -125,7 +126,20 @@ function deleteProject(projectId) {
 function deleteTask(taskId) {
     if (!projects.has(selectedProjectId)) return false;
 
-    return projects.get(selectedProjectId).tasks.delete(taskId);
+    const project = projects.get(selectedProjectId);
+    const task = project.tasks.get(taskId);
+
+    if (!task) return false;
+
+    project.tasks.delete(taskId);
+
+    if (!storage.saveProject(project)) {
+        project.tasks.set(taskId, task);
+        console.error("Failed to delete task. In-memory state has been reverted.");
+        return false;
+    }
+
+    return true;
 }
 
 /**
@@ -136,7 +150,20 @@ function deleteTask(taskId) {
 function deleteNote(noteId) {
     if (!projects.has(selectedProjectId)) return false;
 
-    return projects.get(selectedProjectId).notes.delete(noteId);
+    const project = projects.get(selectedProjectId);
+    const note = project.notes.get(noteId);
+
+    if (!note) return false;
+
+    project.notes.delete(noteId);
+
+    if (!storage.saveProject(project)) {
+        project.notes.set(noteId, note);
+        console.error("Failed to delete task. In-memory state has been reverted.");
+        return false;
+    }
+
+    return true;
 }
 
 /**
