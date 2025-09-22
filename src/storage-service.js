@@ -51,4 +51,16 @@ function saveProject(project) {
     return true;
 }
 
-export {saveProject}
+/**
+ *
+ * @param {string} projectId
+ */
+function removeProject(projectId) {
+    if (!storageAvailable(STORAGE_NAME)) return false;
+
+    localStorage.removeItem(projectId);
+
+    return true;
+}
+
+export {saveProject, removeProject}
