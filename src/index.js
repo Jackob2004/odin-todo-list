@@ -1,17 +1,24 @@
 import "./reset.css";
 import "./styles.css";
-import * as projectService from "./project-service.js";
+import {retrieveAllProjects} from "./storage-service.js"
+import {loadProjects, initializeDefaultProject, getAllProjects} from "./project-service.js";
 import "./content-creation-controller.js";
 import "./content-deletion-controller.js";
 import "./content-edit-controller.js";
 import "./content-view-controller.js";
-import * as mainUIController from "./content-display-controller.js";
+import {displayProjects} from "./content-display-controller.js";
 
 document.addEventListener("DOMContentLoaded", initApp);
 
 function initApp() {
-    projectService.initializeDefaultProject();
+    const retrievedProjects = retrieveAllProjects();
 
-    const allProjects = projectService.getAllProjects();
-    mainUIController.displayProjects(allProjects);
+    if (retrievedProjects) {
+        loadProjects(retrievedProjects);
+    } else {
+        initializeDefaultProject();
+    }
+
+    const allProjects = getAllProjects();
+    displayProjects(allProjects);
 }

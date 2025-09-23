@@ -40,6 +40,20 @@ function projectToStorageFormat(project) {
 
 /**
  *
+ * @param {Object} project in storage format
+ * @returns {module:project.Project}
+ */
+function projectFromStorageFormat(project) {
+    return {
+        title: project.title,
+        tasks: new Map(project.tasks),
+        notes: new Map(project.notes),
+        id: project.id,
+    }
+}
+
+/**
+ *
  * @param {module:project.Project} project
  * @returns {boolean}
  */
@@ -47,7 +61,7 @@ function saveProject(project) {
     if (!storageAvailable(STORAGE_NAME)) return false;
 
     localStorage.setItem(project.id, JSON.stringify(projectToStorageFormat(project)));
-
+    retrieveAllProjects()
     return true;
 }
 
@@ -63,4 +77,17 @@ function removeProject(projectId) {
     return true;
 }
 
-export {saveProject, removeProject}
+/**
+ *
+ * @returns {Array<module:project.Project>|null}
+ */
+function retrieveAllProjects() {
+    if (!storageAvailable(STORAGE_NAME)) return null;
+    if (localStorage.length === 0) return null;
+
+    const allItems= {...localStorage};
+
+    return Object.values(allItems).map((item) => projectFromStorageFormat(JSON.parse(item)));
+}
+
+export {saveProject, removeProject, retrieveAllProjects}

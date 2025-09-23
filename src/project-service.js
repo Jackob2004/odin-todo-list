@@ -419,7 +419,7 @@ function initializeDefaultProject() {
     if (projects.size !== 0) return;
 
     const defaultProject = createProject("Default");
-    projects.set(defaultProject.id, defaultProject);
+    addProject(defaultProject);
 }
 
 export {
