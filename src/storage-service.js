@@ -44,9 +44,13 @@ function projectToStorageFormat(project) {
  * @returns {module:project.Project}
  */
 function projectFromStorageFormat(project) {
+    const modifiedTasks = project.tasks.map(([id, task]) => {
+        return [id, { ...task, dueDate: new Date(task.dueDate) }];
+    });
+
     return {
         title: project.title,
-        tasks: new Map(project.tasks),
+        tasks: new Map(modifiedTasks),
         notes: new Map(project.notes),
         id: project.id,
     }
