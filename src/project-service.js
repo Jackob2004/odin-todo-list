@@ -46,6 +46,8 @@ const projects = new Map();
  */
 let selectedProjectId = null;
 
+const SAVE_ERROR_MESSAGE = "Failed to save task. In-memory state has been reverted";
+
 /**
  *
  * @param {module:project.Project} project
@@ -74,7 +76,7 @@ function addTask(task, projectId = selectedProjectId) {
 
     if (!storage.saveProject(project)) {
         project.tasks.delete(task.id);
-        console.error("Failed to save task. In-memory state has been reverted.");
+        console.error(SAVE_ERROR_MESSAGE);
         return false;
     }
 
@@ -95,7 +97,7 @@ function addNote(note, projectId = selectedProjectId) {
 
     if (!storage.saveProject(project)) {
         project.notes.delete(note.id);
-        console.error("Failed to save task. In-memory state has been reverted.");
+        console.error(SAVE_ERROR_MESSAGE);
         return false;
     }
 
@@ -135,7 +137,7 @@ function deleteTask(taskId) {
 
     if (!storage.saveProject(project)) {
         project.tasks.set(taskId, task);
-        console.error("Failed to delete task. In-memory state has been reverted.");
+        console.error(SAVE_ERROR_MESSAGE);
         return false;
     }
 
@@ -159,7 +161,7 @@ function deleteNote(noteId) {
 
     if (!storage.saveProject(project)) {
         project.notes.set(noteId, note);
-        console.error("Failed to delete task. In-memory state has been reverted.");
+        console.error(SAVE_ERROR_MESSAGE);
         return false;
     }
 
@@ -175,11 +177,19 @@ function deleteNote(noteId) {
 function editTaskStatus(taskId, updatedStatus) {
     if (!projects.has(selectedProjectId) || !updatedStatus) return false;
 
-    const task = projects.get(selectedProjectId).tasks.get(taskId);
+    const project = projects.get(selectedProjectId);
+    const task = project.tasks.get(taskId);
+    const oldStatus = task.status;
 
     if (!task) return false;
 
     task.status = updatedStatus;
+
+    if (!storage.saveProject(project)) {
+        task.status = oldStatus;
+        console.error(SAVE_ERROR_MESSAGE);
+        return false;
+    }
 
     return true;
 }
@@ -193,7 +203,9 @@ function editTaskStatus(taskId, updatedStatus) {
 function editTaskDetails(taskId, details) {
     if (!projects.has(selectedProjectId) || !details) return false;
 
-    const task = projects.get(selectedProjectId).tasks.get(taskId);
+    const project = projects.get(selectedProjectId);
+    const oldTask = structuredClone(project.tasks.get(taskId));
+    const task = project.tasks.get(taskId);
 
     if (!task) return false;
 
@@ -202,6 +214,16 @@ function editTaskDetails(taskId, details) {
     task.dueDate = details.dueDate;
     task.priority = details.priority;
     task.trackable = details.trackable;
+
+    if (!storage.saveProject(project)) {
+        task.title = oldTask.title;
+        task.description = oldTask.description;
+        task.dueDate = oldTask.dueDate;
+        task.priority = oldTask.priority;
+        task.trackable = oldTask.trackable;
+        console.error(SAVE_ERROR_MESSAGE);
+        return false;
+    }
 
     return true;
 }
@@ -216,12 +238,21 @@ function editTaskDetails(taskId, details) {
 function editNote(noteId, title, content) {
     if (!projects.has(selectedProjectId) || !title || !content) return false;
 
+    const project = projects.get(selectedProjectId);
+    const oldNote = structuredClone(project.notes.get(noteId));
     const note = projects.get(selectedProjectId).notes.get(noteId);
 
     if (!note) return false;
 
     note.title = title;
     note.content = content;
+
+    if (!storage.saveProject(project)) {
+        note.title = oldNote.title;
+        note.description = oldNote.description;
+        console.error(SAVE_ERROR_MESSAGE);
+        return false;
+    }
 
     return true;
 }
