@@ -80,11 +80,11 @@ function resetPageNumber() {
 }
 
 /**
- * Sets page size, size must be in range (1-20) otherwise it is set to the closet boundary
+ * Sets page size, size must be in range (1-15) otherwise it is set to the closet boundary
  * @param {number} size
  */
 function setPageSize(size) {
-    const max = 20;
+    const max = 15;
     const min = 1;
 
     if (size > max) {

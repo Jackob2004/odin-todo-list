@@ -13,6 +13,7 @@ import {DisplayState} from "./enums/display-state.js";
 import {SortBy} from "./enums/sort-by";
 import {filteredOverdueTasks, sortedTasks} from "./task-filter-service";
 import {CardAction} from "./enums/card-action";
+import * as pager from "./pager.js";
 
 /**
  * @module contentDisplayController
@@ -28,6 +29,10 @@ const backButton = document.querySelector("#btn-back");
 
 const tasksOrderInput = document.querySelector("#tasks-ordering");
 const tasksFilterInput = document.querySelector("#tasks-filtering");
+
+const prevButton = document.querySelector("#btn-prev");
+const nextButton = document.querySelector("#btn-next");
+const currPageDisplay = document.querySelector("#curr-page");
 
 projectsContainer.addEventListener("click", (event) => {
     const id= event.target.dataset.id;
@@ -74,24 +79,33 @@ document.querySelector("#filtering-options").addEventListener("click", swapTasks
 // come back to all projects
 backButton.addEventListener("click", () => {
     leaveProject();
+    resetPage();
     displayProjects(getAllProjects());
     displayState = DisplayState.VIEW_PROJECTS;
     projectsInfoDisplay.textContent = "All Projects";
     backButton.disabled = true;
 });
 
-pubSub.subscribe(EventType.PROJECT_CREATED, (data) => {
+prevButton.addEventListener("click", () => {
+    if (!pager.prevPage()) return;
+    const currData = getDisplayOptions();
+
+    currData.displayFunction(currData.dataArray);
+    currPageDisplay.textContent = "" + pager.getCurrPageNumber();
+});
+
+nextButton.addEventListener("click", () => {
+    const currData = getDisplayOptions();
+    if (!pager.nextPage(currData.dataArray)) return;
+
+    currData.displayFunction(currData.dataArray);
+    currPageDisplay.textContent = "" + pager.getCurrPageNumber();
+});
+
+pubSub.subscribe(EventType.PROJECT_CREATED, () => {
     if (displayState !== DisplayState.VIEW_PROJECTS) return;
 
-    const summary = {
-        title: data.title,
-        tasks: data.tasks.size,
-        notes: data.notes.size,
-        id: data.id,
-    };
-
-    const projectCard = generateProjectCard(summary);
-    projectsContainer.appendChild(projectCard);
+    displayProjects(getAllProjects());
 });
 
 pubSub.subscribe(EventType.TASK_CREATED, (data) => {
@@ -106,25 +120,26 @@ pubSub.subscribe(EventType.NOTE_CREATED, (data) => {
    if (displayState === DisplayState.VIEW_PROJECTS) {
        displayProjects(getAllProjects());
    } else if (displayState === DisplayState.VIEW_Notes && data.projectId === getSelectedProjectId()) {
-       const note = {
-           title: data.note.title,
-           content: data.note.content,
-           id: data.note.id,
-       };
-
-       const noteCard = generateNoteCard(note);
-       projectsContainer.appendChild(noteCard);
+       displayNotes(getAllNotes());
    }
 });
 
 pubSub.subscribe(EventType.PROJECT_DELETED, () => {
     if (displayState !== DisplayState.VIEW_PROJECTS) return;
 
-    displayProjects(getAllProjects());
+    const projects = getAllProjects();
+
+    validatePage(projects);
+
+    displayProjects(projects);
 });
 
 pubSub.subscribe(EventType.TASK_DELETED, () => {
     if (displayState !== DisplayState.VIEW_Tasks) return;
+
+    const tasks = getAllTasks();
+
+    validatePage(tasks);
 
     displayTasks(getAllTasks());
 });
@@ -132,7 +147,11 @@ pubSub.subscribe(EventType.TASK_DELETED, () => {
 pubSub.subscribe(EventType.NOTE_DELETED, () => {
     if (displayState !== DisplayState.VIEW_Notes) return;
 
-    displayNotes(getAllNotes());
+    const notes = getAllNotes();
+
+    validatePage(notes);
+
+    displayNotes(notes);
 });
 
 pubSub.subscribe(EventType.NOTE_EDITED, () => {
@@ -147,6 +166,40 @@ pubSub.subscribe(EventType.TASK_EDITED, () => {
     displayTasks(getAllTasks());
 });
 
+function getDisplayOptions() {
+    let dataArray;
+    let displayFunction;
+
+    switch (displayState) {
+        case DisplayState.VIEW_PROJECTS:
+            dataArray = getAllProjects();
+            displayFunction = displayProjects;
+            break;
+        case DisplayState.VIEW_Tasks:
+            dataArray = getAllTasks();
+            displayFunction = displayTasks;
+            break;
+        case DisplayState.VIEW_Notes:
+            dataArray = getAllNotes();
+            displayFunction = displayNotes;
+            break;
+    }
+
+    return {dataArray, displayFunction};
+}
+
+function validatePage(elements) {
+    if (!pager.isCurrentPageValid(elements)) {
+        pager.prevPage();
+        currPageDisplay.textContent = "" + pager.getCurrPageNumber();
+    }
+}
+
+function resetPage() {
+    pager.resetPageNumber()
+    currPageDisplay.textContent = "" + pager.getCurrPageNumber();
+}
+
 /**
  *
  * @param {Event} e
@@ -155,6 +208,7 @@ function swapTasks(e) {
     if (displayState !== DisplayState.VIEW_Tasks) return;
     if (e.target.tagName !== "INPUT" && e.target.tagName !== "LABEL") return;
 
+    resetPage();
     displayTasks(getAllTasks());
 }
 
@@ -168,6 +222,7 @@ function swapProjectContent(e) {
 
     const selectedOption = document.querySelector('#items-options input[name="display-mode"]:checked');
 
+    resetPage();
     displayChosenContent(selectedOption.value);
 }
 
@@ -193,6 +248,7 @@ function openProject(projectId) {
     selectProject(projectId);
 
     const selectedOption = document.querySelector('#items-options input[name="display-mode"]:checked');
+    resetPage();
     displayChosenContent(selectedOption.value);
     projectsInfoDisplay.textContent = getProjectName();
     backButton.disabled = false;
@@ -327,9 +383,10 @@ function generateNoteCard(note) {
  * @param {Function} generateCard A function that takes card data and returns a card element.
  */
 function displayCards(cardsData, generateCard) {
+    const currPageElements = pager.getCurrentPage(cardsData);
     const fragment = document.createDocumentFragment();
 
-    for (const item of cardsData) {
+    for (const item of currPageElements) {
         fragment.appendChild(generateCard(item));
     }
 
