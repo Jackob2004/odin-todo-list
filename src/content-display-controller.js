@@ -14,7 +14,6 @@ import {SortBy} from "./enums/sort-by";
 import {filteredOverdueTasks, sortedTasks} from "./task-filter-service";
 import {CardAction} from "./enums/card-action";
 import * as pager from "./pager.js";
-import {resetPageNumber} from "./pager.js";
 
 /**
  * @module contentDisplayController
@@ -192,6 +191,10 @@ function getDisplayOptions() {
     return {dataArray, displayFunction};
 }
 
+/**
+ *
+ * @param {Array<any>} elements
+ */
 function validatePage(elements) {
     if (!pager.isCurrentPageValid(elements)) {
         pager.prevPage();
