@@ -220,6 +220,16 @@
             <div>
                 <button type="button" id="btn-back" class="basic-btn" disabled>Back</button>
 
+                <fieldset id="items-options">
+                    <legend>Select project items to display:</legend>
+                    <div>
+                        <input type="radio" id="display-tasks" name="display-mode" value="View Tasks" checked />
+                        <label for="display-tasks">Tasks</label>
+                        <input type="radio" id="display-notes" name="display-mode" value="View Notes" />
+                        <label for="display-notes">Notes</label>
+                    </div>
+                </fieldset>
+
                 <div id="pager" class="basic-section">
                     <div id="item-summary">
                         <p>Items in total: <span id="total-items">1</span></p>
@@ -242,16 +252,6 @@
                     </div>
                 </div>
             </div>
-
-            <fieldset id="items-options">
-                <legend>Select project items to display:</legend>
-                <div>
-                    <input type="radio" id="display-tasks" name="display-mode" value="View Tasks" checked />
-                    <label for="display-tasks">Tasks</label>
-                    <input type="radio" id="display-notes" name="display-mode" value="View Notes" />
-                    <label for="display-notes">Notes</label>
-                </div>
-            </fieldset>
 
         </div>
 
