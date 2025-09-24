@@ -33,6 +33,7 @@ const tasksFilterInput = document.querySelector("#tasks-filtering");
 const prevButton = document.querySelector("#btn-prev");
 const nextButton = document.querySelector("#btn-next");
 const currPageDisplay = document.querySelector("#curr-page");
+const totalItemsDisplay = document.querySelector("#total-items");
 
 projectsContainer.addEventListener("click", (event) => {
     const id= event.target.dataset.id;
@@ -383,6 +384,7 @@ function generateNoteCard(note) {
  * @param {Function} generateCard A function that takes card data and returns a card element.
  */
 function displayCards(cardsData, generateCard) {
+    totalItemsDisplay.textContent = "" + cardsData.length;
     const currPageElements = pager.getCurrentPage(cardsData);
     const fragment = document.createDocumentFragment();
 
