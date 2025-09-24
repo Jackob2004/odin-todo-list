@@ -70,11 +70,13 @@ main {
 #project-navigator > div {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 #btn-back {
-    width: 100px;
+    width: 120px;
     margin: 15px;
+    padding: 5px;
 }
 
 #btn-back:disabled {
