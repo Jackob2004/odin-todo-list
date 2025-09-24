@@ -10,7 +10,7 @@ body {
     grid-template-columns: 250px 2fr 1fr;
 
     height: 100vh;
-    background: linear-gradient(0deg,rgba(24, 28, 20, 1) 0%, rgba(105, 117, 101, 1) 100%);
+    background: linear-gradient(0deg, rgba(24, 28, 20, 1) 0%, rgba(105, 117, 101, 1) 100%) fixed;
     font-family: Verdana, sans-serif;
 }
 
@@ -41,15 +41,9 @@ body {
 
 #add-actions button {
     padding: 1rem 2rem;
-    border: none;
-    border-radius: 10px;
-    background-color: var(--pallete-green);
-    color: var(--pallete-cream);
-    font-weight: bold;
 }
 
 #add-actions button:hover {
-    background-color: #5a6457;
 }
 
 #projects-info {
@@ -73,6 +67,52 @@ main {
     padding: var(--gap);
 }
 
+#project-navigator > div {
+    display: flex;
+    justify-content: space-between;
+}
+
+#btn-back {
+    width: 100px;
+    margin: 15px;
+}
+
+#btn-back:disabled {
+    opacity: 0.2;
+}
+
+#pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 50%;
+    padding: 0 8px;
+    border: 1px solid var(--pallete-cream);
+}
+
+#pager-controls{
+    display: flex;
+    align-items: center;
+}
+
+#pager-controls button {
+    padding: 5px;
+    border: none;
+    background-color: transparent;
+    color: var(--pallete-cream);
+    font-size: 2rem;
+}
+
+#pager-controls button:hover {
+    color: #b2a79b;
+}
+
+#total-items,
+#curr-page{
+    font-style: italic;
+}
+
 .project-card {
 }
 
@@ -81,4 +121,16 @@ main {
     background-color: var(--pallete-dark);
     color: var(--pallete-cream);
     border-radius: 20px;
+}
+
+.basic-btn {
+    border: none;
+    border-radius: 10px;
+    background-color: var(--pallete-green);
+    color: var(--pallete-cream);
+    font-weight: bold;
+}
+
+.basic-btn:hover:enabled {
+    background-color: #5a6457;
 }

@@ -198,9 +198,9 @@
             <h3>Add items</h3>
 
             <div>
-                <button type="button" id="add-project">Add Project</button>
-                <button type="button" id="add-task">Add Task</button>
-                <button type="button" id="add-note">Add Note</button>
+                <button type="button" id="add-project" class="basic-btn">Add Project</button>
+                <button type="button" id="add-task" class="basic-btn">Add Task</button>
+                <button type="button" id="add-note" class="basic-btn">Add Note</button>
             </div>
         </div>
 
@@ -217,27 +217,29 @@
         </div>
 
         <div id="project-navigator">
-            <button type="button" id="btn-back" disabled>Back</button>
+            <div>
+                <button type="button" id="btn-back" class="basic-btn" disabled>Back</button>
 
-            <div id="pager">
-                <div id="item-summary">
-                    <p>Items in total: <span id="total-items">1</span></p>
-                </div>
+                <div id="pager" class="basic-section">
+                    <div id="item-summary">
+                        <p>Items in total: <span id="total-items">1</span></p>
+                    </div>
 
-                <div>
-                    <label for="items-select">Items per page: </label>
-                    <select name="items-on-page" id="items-select">
-                        <option value="1">1</option>
-                        <option value="5" selected>5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                    </select>
-                </div>
+                    <div>
+                        <label for="items-select">Items per page: </label>
+                        <select name="items-on-page" id="items-select">
+                            <option value="1">1</option>
+                            <option value="5" selected>5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                        </select>
+                    </div>
 
-                <div id="pager-controls">
-                    <button type="button" id="btn-prev"><</button>
-                    <span id="curr-page">1</span>
-                    <button type="button" id="btn-next">></button>
+                    <div id="pager-controls">
+                        <button type="button" id="btn-prev">⬅</button>
+                        <span id="curr-page">1</span>
+                        <button type="button" id="btn-next">➡</button>
+                    </div>
                 </div>
             </div>
 
