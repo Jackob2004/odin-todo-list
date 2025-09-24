@@ -14,6 +14,7 @@ import {SortBy} from "./enums/sort-by";
 import {filteredOverdueTasks, sortedTasks} from "./task-filter-service";
 import {CardAction} from "./enums/card-action";
 import * as pager from "./pager.js";
+import {resetPageNumber} from "./pager.js";
 
 /**
  * @module contentDisplayController
@@ -24,6 +25,7 @@ import * as pager from "./pager.js";
 let displayState = DisplayState.VIEW_PROJECTS;
 
 const projectsContainer = document.querySelector("#projects-container");
+
 const projectsInfoDisplay = document.querySelector("#projects-info h2");
 const backButton = document.querySelector("#btn-back");
 
@@ -76,6 +78,7 @@ projectsContainer.addEventListener("click", (event) => {
 document.querySelector("#items-options").addEventListener("click", swapProjectContent);
 document.querySelector("#sorting-options").addEventListener("click", swapTasks);
 document.querySelector("#filtering-options").addEventListener("click", swapTasks);
+document.querySelector("#items-select").addEventListener("change", updateItemsPerPage);
 
 // come back to all projects
 backButton.addEventListener("click", () => {
@@ -199,6 +202,19 @@ function validatePage(elements) {
 function resetPage() {
     pager.resetPageNumber()
     currPageDisplay.textContent = "" + pager.getCurrPageNumber();
+}
+
+/**
+ *
+ * @param {Event} e
+ */
+function updateItemsPerPage(e) {
+    const updatedValue = Number(e.target.value);
+    pager.setPageSize(updatedValue);
+
+    const options = getDisplayOptions();
+    resetPage();
+    options.displayFunction(options.dataArray);
 }
 
 /**

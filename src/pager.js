@@ -3,7 +3,7 @@
  * @description Provides functionality to access array elements as pages
  */
 
-let pageSize = 3;
+let pageSize = 5;
 
 let currPage = 1;
 
@@ -80,7 +80,7 @@ function resetPageNumber() {
 }
 
 /**
- * Sets page size, size must be in range (1-15) otherwise it is set to the closet boundary
+ * Sets page size, size must be in range [1-15] otherwise it is set to the closet boundary
  * @param {number} size
  */
 function setPageSize(size) {
