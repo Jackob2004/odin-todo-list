@@ -1,3 +1,6 @@
+import {Priority} from "./enums/priority";
+import {Status} from "./enums/status";
+
 /**
  * @module storageService
  * @description provides data persistence through localStorage
@@ -40,13 +43,30 @@ function projectToStorageFormat(project) {
 
 /**
  *
+ * @param {Array<Object>} tasks
+ * @returns {*}
+ */
+function tasksFromStorageFormat(tasks) {
+    return tasks.map(([taskId, taskData]) => {
+        return [
+            taskId,
+            {
+                ...taskData,
+                dueDate: new Date(taskData.dueDate),
+                priority: Priority.fromString(taskData.priority),
+                status: Status.fromString(taskData.status)
+            }
+        ];
+    });
+}
+
+/**
+ *
  * @param {Object} project in storage format
  * @returns {module:project.Project}
  */
 function projectFromStorageFormat(project) {
-    const modifiedTasks = project.tasks.map(([id, task]) => {
-        return [id, { ...task, dueDate: new Date(task.dueDate) }];
-    });
+    const modifiedTasks = tasksFromStorageFormat(project.tasks);
 
     return {
         title: project.title,
