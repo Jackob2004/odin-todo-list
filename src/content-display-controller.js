@@ -397,26 +397,32 @@ function generateTaskCard(taskSummary) {
 function generateNoteCard(note) {
     const card = document.createElement("div");
     const heading = document.createElement("h3");
+    const content = document.createElement("p");
+    const buttonsWrapper = document.createElement("div");
     const deleteButton = document.createElement("button");
     const editButton = document.createElement("button");
-    const content = document.createElement("p");
+    const deleteIcon = document.createElement("img");
+    const editIcon = document.createElement("img");
 
     heading.textContent = note.title;
     content.textContent = note.content;
 
-    deleteButton.textContent = "x";
-    deleteButton.dataset.id = note.id;
-    deleteButton.dataset.action = CardAction.DELETE_NOTE.name;
+    deleteIcon.src = "" + iconDelete;
+    deleteIcon.dataset.id = note.id;
+    deleteIcon.dataset.action = CardAction.DELETE_NOTE.name;
 
-    editButton.textContent = "edit";
-    editButton.dataset.id = note.id;
-    editButton.dataset.action = CardAction.EDIT_NOTE.name;
+    editIcon.src = "" + iconEdit;
+    editIcon.dataset.id = note.id;
+    editIcon.dataset.action = CardAction.EDIT_NOTE.name;
 
-    card.dataset.id = note.id;
-    card.dataset.action = CardAction.VIEW_NOTE.name;
-    card.setAttribute("class", "note-card");
+    card.classList.add("note-card", "card");
 
-    card.append(heading, deleteButton, editButton, content);
+    applyCardDataset(note.id, CardAction.VIEW_NOTE, card, heading, content);
+
+    deleteButton.appendChild(deleteIcon);
+    editButton.appendChild(editIcon);
+    buttonsWrapper.append(deleteButton, editButton)
+    card.append(heading, content, buttonsWrapper);
 
     return card;
 }
