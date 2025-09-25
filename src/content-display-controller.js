@@ -15,6 +15,7 @@ import {filteredOverdueTasks, sortedTasks} from "./task-filter-service";
 import {CardAction} from "./enums/card-action";
 import * as pager from "./pager.js";
 import iconDelete from "/assets/icon-delete.svg";
+import iconEdit from "/assets/icon-edit.svg";
 
 /**
  * @module contentDisplayController
@@ -84,8 +85,8 @@ document.querySelector("#items-select").addEventListener("change", updateItemsPe
 backButton.addEventListener("click", () => {
     leaveProject();
     resetPage();
-    displayProjects(getAllProjects());
     displayState = DisplayState.VIEW_PROJECTS;
+    displayProjects(getAllProjects());
     projectsInfoDisplay.textContent = "All Projects";
     backButton.disabled = true;
 });
@@ -290,6 +291,19 @@ function changeTaskStatus(value, id) {
 }
 
 /**
+ *
+ * @param {string} id
+ * @param {CardAction} action
+ * @param {HTMLElement} elements
+ */
+function applyCardDataset(id, action, ...elements) {
+    for (const element of elements) {
+        element.dataset.id = id;
+        element.dataset.action = action.name;
+    }
+}
+
+/**
  * @param {module:projectService.ProjectSummary} projectData
  * @returns {HTMLDivElement}
  */
@@ -305,11 +319,7 @@ function generateProjectCard(projectData) {
     const totalNotes = document.createElement("p");
 
     heading.textContent = projectData.title;
-    heading.dataset.action = CardAction.OPEN_PROJECT.name;
-    heading.dataset.id = projectData.id;
 
-    itemsInfoWrapper.dataset.action = CardAction.OPEN_PROJECT.name;
-    itemsInfoWrapper.dataset.id = projectData.id;
     totalTasks.textContent = "Tasks: " + projectData.tasks;
     totalNotes.textContent = "Notes: " + projectData.notes;
 
@@ -317,9 +327,9 @@ function generateProjectCard(projectData) {
     deleteIcon.dataset.action = CardAction.DELETE_PROJECT.name;
     deleteIcon.dataset.id = projectData.id;
 
-    card.dataset.id = projectData.id;
-    card.dataset.action = CardAction.OPEN_PROJECT.name;
-    card.setAttribute("class", "project-card");
+    card.classList.add("project-card", "card");
+
+    applyCardDataset(projectData.id, CardAction.OPEN_PROJECT, card, heading, itemsInfoWrapper);
 
     deleteButton.appendChild(deleteIcon);
     itemsInfoWrapper.append(totalTasks, totalNotes);
@@ -337,8 +347,11 @@ function generateTaskCard(taskSummary) {
     const heading = document.createElement("h4");
     const selectStatus = document.createElement("select");
     const dateInfo = document.createElement("p");
+    const buttonsWrapper = document.createElement("div");
     const deleteButton = document.createElement("button");
     const editButton = document.createElement("button");
+    const deleteIcon = document.createElement("img");
+    const editIcon = document.createElement("img");
 
     for (const status of Object.values(Status)) {
         const option = document.createElement("option");
@@ -356,19 +369,22 @@ function generateTaskCard(taskSummary) {
     selectStatus.dataset.action = CardAction.CHANGE_TASK_STATUS.name;
     dateInfo.textContent = taskSummary.dueDate.toLocaleDateString();
 
-    deleteButton.textContent = "X";
-    deleteButton.dataset.id = taskSummary.id;
-    deleteButton.dataset.action = CardAction.DELETE_TASK.name;
+    deleteIcon.dataset.id = taskSummary.id;
+    deleteIcon.dataset.action = CardAction.DELETE_TASK.name;
+    deleteIcon.src = "" + iconDelete;
 
-    editButton.textContent = "edit";
-    editButton.dataset.id = taskSummary.id;
-    editButton.dataset.action = CardAction.EDIT_TASK.name;
+    editIcon.dataset.id = taskSummary.id;
+    editIcon.dataset.action = CardAction.EDIT_TASK.name;
+    editIcon.src = "" + iconEdit;
 
-    card.dataset.id = taskSummary.id;
-    card.dataset.action = CardAction.VIEW_TASK.name;
-    card.setAttribute("class", "task-card");
+    card.classList.add("task-card", taskSummary.priority.style, "card");
 
-    card.append(heading, selectStatus, dateInfo, deleteButton, editButton);
+    applyCardDataset(taskSummary.id, CardAction.VIEW_TASK, card, heading, dateInfo);
+
+    deleteButton.appendChild(deleteIcon);
+    editButton.appendChild(editIcon);
+    buttonsWrapper.append(deleteButton, editButton)
+    card.append(heading, selectStatus, dateInfo, buttonsWrapper);
 
     return card;
 }
@@ -419,6 +435,7 @@ function displayCards(cardsData, generateCard) {
         fragment.appendChild(generateCard(item));
     }
 
+    projectsContainer.setAttribute("class", displayState.style);
     projectsContainer.replaceChildren(fragment);
 }
 

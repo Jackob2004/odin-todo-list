@@ -62,11 +62,18 @@ main {
     --gap: 1rem;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, 250px);
-    grid-auto-rows: 50%;
     gap: var(--gap);
 
     padding: var(--gap);
+}
+
+.projects {
+    grid-template-columns: repeat(auto-fit, 250px);
+    grid-auto-rows: minmax(300px, 50%);
+}
+
+.tasks {
+    grid-auto-rows: 130px;
 }
 
 #project-navigator > div {
@@ -117,28 +124,18 @@ main {
     font-style: italic;
 }
 
-.project-card {
-    display: grid;
-    grid-template-columns: 1fr auto;
-
+.card {
     padding: 1rem;
-    border: none;
     border-radius: 10px;
     background-color: var(--pallete-gray);
     color: var(--pallete-cream);
 }
 
-.project-card h3 {
-    height: min-content;
-    width: min-content;
-    border-bottom: 3px solid var(--pallete-green);
-}
-
-.project-card:hover {
+.card:hover {
     box-shadow: var(--card-shadow);
 }
 
-.project-card button {
+.card button {
     width: 2rem;
     height: 1rem;
     border: none;
@@ -146,12 +143,23 @@ main {
     visibility: hidden;
 }
 
-.project-card:hover button {
+.card:hover button {
     visibility: visible;
 }
 
-.project-card:hover button:hover {
+.card:hover button:hover {
     opacity: 0.8;
+}
+
+.project-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+.project-card h3 {
+    height: min-content;
+    width: min-content;
+    border-bottom: 3px solid var(--pallete-green);
 }
 
 .project-card > div {
@@ -162,6 +170,41 @@ main {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.low {
+    --color: #69ce5e;
+}
+
+.medium {
+    --color: #cebf5e;
+}
+
+.high {
+    --color: #d36161;
+}
+
+.urgent {
+    --color: #9861d3;
+}
+
+.task-card {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    border-left: 5px solid var(--color);
+}
+
+.task-card div {
+    justify-self: end;
+}
+
+.task-card p {
+    justify-self: center;
+}
+
+.task-card select {
+    justify-self: center;
 }
 
 .basic-section {
