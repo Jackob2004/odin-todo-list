@@ -14,6 +14,7 @@ import {SortBy} from "./enums/sort-by";
 import {filteredOverdueTasks, sortedTasks} from "./task-filter-service";
 import {CardAction} from "./enums/card-action";
 import * as pager from "./pager.js";
+import iconDelete from "/assets/icon-delete.svg";
 
 /**
  * @module contentDisplayController
@@ -297,23 +298,30 @@ function generateProjectCard(projectData) {
 
     const heading = document.createElement("h3");
     const deleteButton = document.createElement("button");
+    const deleteIcon = document.createElement("img");
 
     const itemsInfoWrapper = document.createElement("div");
     const totalTasks = document.createElement("p");
     const totalNotes = document.createElement("p");
 
     heading.textContent = projectData.title;
-    deleteButton.textContent = "x";
+    heading.dataset.action = CardAction.OPEN_PROJECT.name;
+    heading.dataset.id = projectData.id;
+
+    itemsInfoWrapper.dataset.action = CardAction.OPEN_PROJECT.name;
+    itemsInfoWrapper.dataset.id = projectData.id;
     totalTasks.textContent = "Tasks: " + projectData.tasks;
     totalNotes.textContent = "Notes: " + projectData.notes;
 
-    deleteButton.dataset.action = CardAction.DELETE_PROJECT.name;
-    deleteButton.dataset.id = projectData.id;
+    deleteIcon.src = "" + iconDelete;
+    deleteIcon.dataset.action = CardAction.DELETE_PROJECT.name;
+    deleteIcon.dataset.id = projectData.id;
 
     card.dataset.id = projectData.id;
     card.dataset.action = CardAction.OPEN_PROJECT.name;
     card.setAttribute("class", "project-card");
 
+    deleteButton.appendChild(deleteIcon);
     itemsInfoWrapper.append(totalTasks, totalNotes);
     card.append(heading, deleteButton, itemsInfoWrapper);
 

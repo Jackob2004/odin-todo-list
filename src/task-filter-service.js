@@ -11,7 +11,6 @@
  */
 function sortedTasks(allTasks, sortBy, ascending) {
     if (!sortBy) return null;
-
     if (!allTasks) return null;
 
     const sortedTasks =  [...allTasks].sort(sortBy.comparator);
