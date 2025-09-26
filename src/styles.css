@@ -258,6 +258,10 @@ dialog {
     color: #e13939;
 }
 
+.edit {
+    color: #39e1db;
+}
+
 dialog form {
     display: grid;
     gap: 1rem;
