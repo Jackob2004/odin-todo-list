@@ -267,7 +267,8 @@ dialog form {
     gap: 1rem;
 }
 
-dialog h3 {
+dialog h3,
+dialog p:first-of-type {
     margin-bottom: 1.2rem;
 }
 
