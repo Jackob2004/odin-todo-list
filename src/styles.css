@@ -241,7 +241,7 @@ main {
     align-self: end;
 }
 
-#add-project-window {
+dialog {
     margin: auto;
     padding: 1rem;
     border: 5px dashed var(--pallete-green);
@@ -254,40 +254,55 @@ main {
     color: #75e139;
 }
 
-#add-project-window form {
+dialog form {
     display: grid;
     gap: 1rem;
 
     margin-top: 1.2rem;
 }
 
-#add-project-window label {
+dialog label {
     margin-right: 0.5rem;
 }
 
-#add-project-window input {
+dialog input,
+dialog textarea {
     padding: 5px 10px;
     border: none;
     background-color: var(--pallete-cream);
     border-radius: 10px;
 }
 
-#add-project-window input:focus {
+dialog input:focus,
+dialog textarea:focus {
     outline: 3px dotted var(--pallete-cream);
     outline-offset: 3px;
 }
 
-#add-project-window div {
+dialog div {
     justify-self: center;
     display: flex;
     gap: 1rem;
+
+    margin-top: 1rem;
 }
 
-#add-project-window button {
+dialog button {
     padding: 5px 10px;
 }
 
 dialog::backdrop {
+}
+
+dialog form  p {
+    display: flex;
+    align-items: center;
+}
+
+dialog label {
+    text-align: right;
+    width: 120px;
+    padding-right: 20px;
 }
 
 .basic-section {

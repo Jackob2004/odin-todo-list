@@ -26,36 +26,48 @@
     </dialog>
 
     <dialog id="add-task-window">
-        <h3>Add Task</h3>
+        <h3 class="add">Add Task</h3>
         <form method="dialog">
             <p>Required fields are followed by <strong><span aria-label="required">*</span></strong>.</p>
 
-            <label for="task-project-select">Project<strong><span aria-label="required">*</span></strong></label>
-            <select name="project" id="task-project-select"></select>
+            <p>
+                <label for="task-project-select">Project<strong><span aria-label="required">*</span></strong></label>
+                <select name="project" id="task-project-select"></select>
+            </p>
 
-            <label for="task-title-field">Title<strong><span aria-label="required">*</span></strong></label>
-            <input type="text" name="title" id="task-title-field" autofocus maxlength="20" required>
+            <p>
+                <label for="task-title-field">Title<strong><span aria-label="required">*</span></strong></label>
+                <input type="text" name="title" id="task-title-field" autofocus maxlength="20" required>
+            </p>
 
-            <label for="task-description-field">Description<strong><span aria-label="required">*</span></strong></label>
-            <textarea name="description" id="task-description-field" rows="5" cols="33" maxlength="50" required></textarea>
+            <p>
+                <label for="task-description-field">Description<strong><span aria-label="required">*</span></strong></label>
+                <textarea name="description" id="task-description-field" rows="5" cols="33" maxlength="50" required></textarea>
+            </p>
 
-            <label for="task-date-field">Due Date<strong><span aria-label="required">*</span></strong></label>
-            <input type="date" name="date" id="task-date-field" required>
+            <p>
+                <label for="task-date-field">Due Date<strong><span aria-label="required">*</span></strong></label>
+                <input type="date" name="date" id="task-date-field" required>
+            </p>
 
-            <label for="task-priority-field">Priority<strong><span aria-label="required">*</span></strong></label>
-            <select name="priority" id="task-priority-field" required>
-                <option value="Low" selected>Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-                <option value="Urgent">Urgent</option>
-            </select>
+            <p>
+                <label for="task-priority-field">Priority<strong><span aria-label="required">*</span></strong></label>
+                <select name="priority" id="task-priority-field" required>
+                    <option value="Low" selected>Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Urgent">Urgent</option>
+                </select>
+            </p>
 
-            <label for="task-track-field">Trackable</label>
-            <input type="checkbox" name="track" id="task-track-field" checked>
+            <p>
+                <label for="task-track-field">Trackable</label>
+                <input type="checkbox" name="track" id="task-track-field" checked>
+            </p>
 
             <div>
-                <button type="button" formnovalidate>Cancel</button>
-                <button type="submit">Confirm</button>
+                <button type="button" class="basic-btn" formnovalidate>Cancel</button>
+                <button type="submit" class="basic-btn">Confirm</button>
             </div>
         </form>
     </dialog>
