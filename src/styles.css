@@ -99,6 +99,8 @@ main {
 
 #pager {
     display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
     align-items: center;
     justify-content: space-between;
 
@@ -358,6 +360,11 @@ dialog label {
     border-radius: 10px;
 }
 
+#items-options div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
 
 .basic-section {
     margin: 15px;

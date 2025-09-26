@@ -257,10 +257,15 @@
                 <fieldset id="items-options" class="basic-section options">
                     <legend>Select project items to display:</legend>
                     <div>
-                        <input type="radio" id="display-tasks" name="display-mode" value="View Tasks" checked />
-                        <label for="display-tasks">Tasks</label>
-                        <input type="radio" id="display-notes" name="display-mode" value="View Notes" />
-                        <label for="display-notes">Notes</label>
+                        <p>
+                            <input type="radio" id="display-tasks" name="display-mode" value="View Tasks" checked />
+                            <label for="display-tasks">Tasks</label>
+                        </p>
+
+                        <p>
+                            <input type="radio" id="display-notes" name="display-mode" value="View Notes" />
+                            <label for="display-notes">Notes</label>
+                        </p>
                     </div>
                 </fieldset>
 
@@ -296,14 +301,25 @@
         <fieldset id="sorting-options">
             <legend>Sort tasks by:</legend>
             <div>
-                <input type="radio" id="sort-by-none" name="sorting-mode" value="None" checked />
-                <label for="sort-by-none">None</label>
-                <input type="radio" id="sort-by-priority" name="sorting-mode" value="Priority" />
-                <label for="sort-by-priority">Priority</label>
-                <input type="radio" id="sort-by-date" name="sorting-mode" value="Date" />
-                <label for="sort-by-date">Due Date</label>
-                <input type="radio" id="sort-by-status" name="sorting-mode" value="Status" />
-                <label for="sort-by-status">Status</label>
+                <p>
+                    <input type="radio" id="sort-by-none" name="sorting-mode" value="None" checked />
+                    <label for="sort-by-none">None</label>
+                </p>
+
+                <p>
+                    <input type="radio" id="sort-by-priority" name="sorting-mode" value="Priority" />
+                    <label for="sort-by-priority">Priority</label>
+                </p>
+
+                <p>
+                    <input type="radio" id="sort-by-date" name="sorting-mode" value="Date" />
+                    <label for="sort-by-date">Due Date</label>
+                </p>
+
+                <p>
+                    <input type="radio" id="sort-by-status" name="sorting-mode" value="Status" />
+                    <label for="sort-by-status">Status</label>
+                </p>
             </div>
 
             <div>
