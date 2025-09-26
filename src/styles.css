@@ -268,7 +268,7 @@ dialog form {
 }
 
 dialog h3,
-dialog p:first-of-type {
+dialog:not(.view-window) p:first-of-type {
     margin-bottom: 1.2rem;
 }
 
@@ -314,6 +314,26 @@ dialog label {
     text-align: right;
     width: 120px;
     padding-right: 20px;
+}
+
+.view-window {
+    width: 600px;
+    height: 300px;
+    border: 10px ridge var(--pallete-green);
+
+    overflow: auto;
+    scrollbar-color: var(--pallete-cream) var(--pallete-dark);
+    scrollbar-width: thin;
+}
+
+.view-window span {
+    display: inline-block;
+    color: var(--pallete-cream);
+}
+
+.view-window  p {
+    margin-bottom: 1rem;
+    color: var(--pallete-green);
 }
 
 .basic-section {
