@@ -336,6 +336,29 @@ dialog label {
     color: var(--pallete-green);
 }
 
+.options {
+    padding: 1rem;
+    border: 1px solid var(--pallete-cream);
+    height: min-content;
+}
+
+.options fieldset {
+    padding: 1rem;
+    border: 4px solid var(--pallete-green);
+}
+
+.options fieldset:first-child {
+    margin-bottom: 1rem;
+}
+
+.options legend {
+    padding: 2px 4px;
+    font-weight: bold;
+    background-color: var(--pallete-gray);
+    border-radius: 10px;
+}
+
+
 .basic-section {
     margin: 15px;
     background-color: var(--pallete-dark);
