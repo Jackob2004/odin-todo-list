@@ -241,6 +241,55 @@ main {
     align-self: end;
 }
 
+#add-project-window {
+    margin: auto;
+    padding: 1rem;
+    border: 5px dashed var(--pallete-green);
+    border-radius: 10px;
+    background-color: var(--pallete-dark);
+    color: var(--pallete-cream);
+}
+
+.add {
+    color: #75e139;
+}
+
+#add-project-window form {
+    display: grid;
+    gap: 1rem;
+
+    margin-top: 1.2rem;
+}
+
+#add-project-window label {
+    margin-right: 0.5rem;
+}
+
+#add-project-window input {
+    padding: 5px 10px;
+    border: none;
+    background-color: var(--pallete-cream);
+    border-radius: 10px;
+}
+
+#add-project-window input:focus {
+    outline: 3px dotted var(--pallete-cream);
+    outline-offset: 3px;
+}
+
+#add-project-window div {
+    justify-self: center;
+    display: flex;
+    gap: 1rem;
+}
+
+#add-project-window button {
+    padding: 5px 10px;
+}
+
+dialog::backdrop {
+}
+
 .basic-section {
     margin: 15px;
     background-color: var(--pallete-dark);

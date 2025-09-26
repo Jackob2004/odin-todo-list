@@ -9,16 +9,18 @@
 <body>
 
     <dialog id="add-project-window">
-        <h3>Add Project</h3>
+        <h3 class="add">Add Project</h3>
         <form method="dialog">
             <p>Required fields are followed by <strong><span aria-label="required">*</span></strong>.</p>
 
-            <label for="project-title-field">Title<strong><span aria-label="required">*</span></strong></label>
-            <input type="text" name="title" id="project-title-field" autofocus maxlength="20" required>
+            <p>
+                <label for="project-title-field">Title<strong><span aria-label="required">*</span></strong></label>
+                <input type="text" name="title" id="project-title-field" autofocus maxlength="15" required>
+            </p>
 
             <div>
-                <button type="button" formnovalidate>Cancel</button>
-                <button type="submit">Confirm</button>
+                <button type="button" class="basic-btn" formnovalidate>Cancel</button>
+                <button type="submit" class="basic-btn" >Confirm</button>
             </div>
         </form>
     </dialog>
