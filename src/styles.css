@@ -254,11 +254,17 @@ dialog {
     color: #75e139;
 }
 
+.delete {
+    color: #e13939;
+}
+
 dialog form {
     display: grid;
     gap: 1rem;
+}
 
-    margin-top: 1.2rem;
+dialog h3 {
+    margin-bottom: 1.2rem;
 }
 
 dialog label {
