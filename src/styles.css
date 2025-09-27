@@ -349,6 +349,10 @@ dialog label {
     top: 15px;
 }
 
+#tasks-sorter ul {
+    margin-left: 1rem;
+}
+
 .options {
     padding: 1rem;
     border: 1px solid var(--pallete-cream);

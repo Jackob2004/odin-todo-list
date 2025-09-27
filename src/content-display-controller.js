@@ -11,11 +11,12 @@ import {pubSub} from "./pub-sub.js";
 import {EventType} from "./enums/event-type.js";
 import {DisplayState} from "./enums/display-state.js";
 import {SortBy} from "./enums/sort-by";
-import {filteredOverdueTasks, sortedTasks} from "./task-filter-service";
+import {filteredTasks, sortedTasks} from "./task-filter-service";
 import {CardAction} from "./enums/card-action";
 import * as pager from "./pager.js";
 import iconDelete from "/assets/icon-delete.svg";
 import iconEdit from "/assets/icon-edit.svg";
+import {FilterBy} from "./enums/filter-by";
 
 /**
  * @module contentDisplayController
@@ -31,7 +32,6 @@ const projectsInfoDisplay = document.querySelector("#projects-info h2");
 const backButton = document.querySelector("#btn-back");
 
 const tasksOrderInput = document.querySelector("#tasks-ordering");
-const tasksFilterInput = document.querySelector("#tasks-filtering");
 
 const prevButton = document.querySelector("#btn-prev");
 const nextButton = document.querySelector("#btn-next");
@@ -454,26 +454,49 @@ function displayProjects(summaries) {
 }
 
 /**
+ * @returns {{sorter: SortBy, ascending: boolean}|null}
+ */
+function readSortingInput() {
+    const selectedSorting= document.querySelector('#sorting-options input[name="sorting-mode"]:checked');
+    const ascending = tasksOrderInput.checked;
+
+    try {
+        return {sorter: /** @type SortBy */ SortBy.fromString(selectedSorting.value), ascending: ascending};
+    } catch (error) {
+        return null;
+    }
+}
+
+/**
+ * @returns {FilterBy|null}
+ */
+function readFilteringInput() {
+    const selectedFilter = document.querySelector('#filtering-options input[name="filtering-mode"]:checked');
+
+    try {
+        return  /** @type FilterBy */ FilterBy.fromString(selectedFilter.value);
+    } catch (error) {
+        return null;
+    }
+}
+
+/**
  * @param {Array<module:projectService.TaskSummary>} summaries
  */
 function displayTasks(summaries) {
     if (!summaries) return;
 
-    const selectedSortingOption = document.querySelector('#sorting-options input[name="sorting-mode"]:checked');
-
-    let tasksToDisplay;
-    try {
-        const sortBy = /** @type SortBy */ SortBy.fromString(selectedSortingOption.value);
-        const ascending= tasksOrderInput.checked;
-        tasksToDisplay = sortedTasks(summaries, sortBy, ascending);
-    } catch (error) {
-        tasksToDisplay = summaries;
+    const sortingOptions = readSortingInput();
+    if (sortingOptions) {
+        summaries = sortedTasks(summaries, sortingOptions.sorter, sortingOptions.ascending);
     }
 
-    const filter = tasksFilterInput.checked;
-    tasksToDisplay = filter ? filteredOverdueTasks(tasksToDisplay) : tasksToDisplay;
+    const filter = readFilteringInput();
+    if (filter) {
+        summaries = filteredTasks(summaries, filter);
+    }
 
-    displayCards(tasksToDisplay, generateTaskCard);
+    displayCards(summaries, generateTaskCard);
 }
 
 /**

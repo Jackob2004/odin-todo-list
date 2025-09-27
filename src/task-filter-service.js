@@ -20,17 +20,14 @@ function sortedTasks(allTasks, sortBy, ascending) {
 
 /**
  * @param {Array<module:projectService.TaskSummary>} allTasks the array to filter
- * @returns {Array<module:projectService.TaskSummary>|null} overdue tasks or null if provided argument is not valid
+ * @param {FilterBy} filterBy
+ * @returns {Array<module:projectService.TaskSummary>|null} filtered tasks or null if provided arguments are not valid
  */
-function filteredOverdueTasks(allTasks) {
+function filteredTasks(allTasks, filterBy) {
     if (!allTasks) return null;
+    if (!filterBy) return null;
 
-    const currentDate= new Date();
-    currentDate.setHours(0,0,0);
-
-    const currentTime = currentDate.getTime();
-
-    return allTasks.filter((task) => task.dueDate.getTime() < currentTime);
+    return [...allTasks].filter(filterBy.predicate);
 }
 
-export {sortedTasks, filteredOverdueTasks};
+export {sortedTasks, filteredTasks};
