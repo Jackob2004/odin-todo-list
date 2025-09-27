@@ -300,27 +300,24 @@
 
         <fieldset id="sorting-options">
             <legend>Sort tasks by:</legend>
-            <div>
-                <p>
-                    <input type="radio" id="sort-by-none" name="sorting-mode" value="None" checked />
+            <ul>
+                <li>
                     <label for="sort-by-none">None</label>
-                </p>
-
-                <p>
-                    <input type="radio" id="sort-by-priority" name="sorting-mode" value="Priority" />
+                    <input type="radio" id="sort-by-none" name="sorting-mode" value="None" checked />
+                </li>
+                <li>
                     <label for="sort-by-priority">Priority</label>
-                </p>
-
-                <p>
-                    <input type="radio" id="sort-by-date" name="sorting-mode" value="Date" />
+                    <input type="radio" id="sort-by-priority" name="sorting-mode" value="Priority" />
+                </li>
+                <li>
                     <label for="sort-by-date">Due Date</label>
-                </p>
-
-                <p>
-                    <input type="radio" id="sort-by-status" name="sorting-mode" value="Status" />
+                    <input type="radio" id="sort-by-date" name="sorting-mode" value="Date" />
+                </li>
+                <li>
                     <label for="sort-by-status">Status</label>
-                </p>
-            </div>
+                    <input type="radio" id="sort-by-status" name="sorting-mode" value="Status" />
+                </li>
+            </ul>
 
             <div>
                 <input type="checkbox" id="tasks-ordering" checked />
@@ -330,10 +327,24 @@
 
         <fieldset id="filtering-options">
             <legend>Filter tasks by:</legend>
-            <div>
-                <input type="checkbox" id="tasks-filtering" />
-                <label for="tasks-filtering">Only overdue</label>
-            </div>
+            <ul>
+                <li>
+                    <label for="filter-by-none">None</label>
+                    <input type="radio" id="filter-by-none" name="filtering-mode" value="None" checked/>
+                </li>
+                <li>
+                    <label for="filter-by-finished">Finished</label>
+                    <input type="radio" id="filter-by-finished" name="filtering-mode" value="Finished" />
+                </li>
+                <li>
+                    <label for="filter-by-unfinished">Unfinished</label>
+                    <input type="radio" id="filter-by-unfinished" name="filtering-mode" value="Unfinished" />
+                </li>
+                <li>
+                    <label for="filter-by-overdue">Overdue</label>
+                    <input type="radio" id="filter-by-overdue" name="filtering-mode" value="Overdue" />
+                </li>
+            </ul>
         </fieldset>
 
     </div>
