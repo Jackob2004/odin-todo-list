@@ -377,7 +377,7 @@ function generateTaskCard(taskSummary) {
     editIcon.dataset.action = CardAction.EDIT_TASK.name;
     editIcon.src = "" + iconEdit;
 
-    card.classList.add("task-card", taskSummary.priority.style, "card");
+    card.classList.add("task-card", taskSummary.priority.style, taskSummary.status.style, "card");
 
     applyCardDataset(taskSummary.id, CardAction.VIEW_TASK, card, heading, dateInfo);
 

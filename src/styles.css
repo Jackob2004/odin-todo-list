@@ -200,6 +200,16 @@ main {
     --color: #9861d3;
 }
 
+/* different task statues */
+
+.done {
+    text-decoration: line-through;
+}
+
+.in-progress {
+    text-decoration: underline;
+}
+
 .task-card {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
